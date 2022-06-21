@@ -10,9 +10,8 @@ namespace ChessWF.Models.Figures
     {
         private bool _moved = false;
 
-        public Pawn()
+        public Pawn(string image, bool isBlack = false) : base(image, isBlack)
         {
-            FigureType = FigureType.Pawn;
             FigureMoved += () => _moved = true;
         }
         public override List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells)

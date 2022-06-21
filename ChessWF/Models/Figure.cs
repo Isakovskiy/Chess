@@ -8,19 +8,15 @@ namespace ChessWF.Models
 {
     abstract class Figure
     {
-        static public readonly Dictionary<FigureType, string> Images = new Dictionary<FigureType, string>() 
-        { 
-
-        }; 
-
-        public FigureType FigureType { get; protected set; }
         public readonly bool IsBlack;
+        public readonly string Image;
 
         public event Action FigureMoved;
 
-        public Figure(bool isBlack = false)
+        public Figure(string image, bool isBlack = false)
         {
             IsBlack = isBlack;
+            Image = image;
         }
 
         public void Move(Sell newSell)

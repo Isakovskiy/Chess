@@ -8,6 +8,7 @@ namespace ChessWF.Models
 {
     enum FigureType
     {
-        Pawn
+        Pawn,
+        Knight
     }
 }
