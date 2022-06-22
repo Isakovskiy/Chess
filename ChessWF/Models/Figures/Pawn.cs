@@ -16,38 +16,23 @@ namespace ChessWF.Models.Figures
             var list = new List<Sell>();
             var dir = Color == FigureColor.Black ? -1 : 1;
 
-
-            if (!Moved)
+            if (CanMoveTo(figureSell.X, figureSell.Y + dir, boardSells))
             {
-                for(int i = 1; i <= 2; i++)
+                list.Add(boardSells[figureSell.X, figureSell.Y + dir]);
+
+                if(!Moved && CanMoveTo(figureSell.X, figureSell.Y + dir * 2, boardSells))
                 {
-                    if (CanMoveTo(figureSell.X, figureSell.Y + dir * i, boardSells))
-                    {
-                        list.Add(boardSells[figureSell.X, figureSell.Y + dir * i]);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                        
+                    list.Add(boardSells[figureSell.X, figureSell.Y + dir * 2]);
                 }
             }
-            else
+            for(int i = -1; i <= 1; i += 2)
             {
-                if(CanMoveTo(figureSell.X, figureSell.Y + dir, boardSells))
+                if (CanMoveTo(figureSell.X + i, figureSell.Y + dir, boardSells) && boardSells[figureSell.X + i, figureSell.Y + dir].Figure != null)
                 {
-                    list.Add(boardSells[figureSell.X, figureSell.Y + dir]);
+                    list.Add(boardSells[figureSell.X + i, figureSell.Y + dir]);
                 }
-
-                for(int i = -1; i <= 1; i += 2)
-                {
-                    if (CanMoveTo(figureSell.X + i, figureSell.Y + dir, boardSells) && boardSells[figureSell.X + i, figureSell.Y + dir].Figure != null)
-                    {
-                        list.Add(boardSells[figureSell.X + i, figureSell.Y + dir]);
-                    }
-                }
-
             }
+
 
             return list;
         }
