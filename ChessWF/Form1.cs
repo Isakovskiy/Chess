@@ -22,7 +22,7 @@ namespace ChessWF
         {
             var board = new Board();
             Figure f;
-            var sells = board.FindAvaibleSells(0, 0, out f);
+            var sells = board.FindAvaibleSells(4, 4, out f);
 
             foreach (var sell in sells)
             {
