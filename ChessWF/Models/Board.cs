@@ -26,9 +26,12 @@ namespace ChessWF.Models
             }
 
             Figures = new List<Figure>();
-            Figures.Add(new Pawn());
+            Figures.Add(new Bishop(image: "im"));
 
-            Sells[0, 0].Figure = Figures[0];
+            Sells[4, 4].Figure = Figures[0];
+            Sells[3, 3].Figure = Figures[0];
+            Sells[3, 5].Figure = Figures[0];
+            Sells[5, 3].Figure = Figures[0];
             
         }
 
