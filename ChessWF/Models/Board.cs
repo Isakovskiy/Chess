@@ -11,52 +11,30 @@ namespace ChessWF.Models
     {
         public const int SIZE = 8;
         public Sell[,] Sells { get; set; }
-
-        public List<Figure> Figures { get; set; }
         public Board()
         {
             Sells = GetEmptyBoard();
-
-            Figures = new List<Figure>();
-            Figures.Add(new Bishop(image: "im"));
-
-            Sells[4, 4].Figure = Figures[0];
-            Sells[3, 3].Figure = Figures[0];
-            Sells[3, 5].Figure = Figures[0];
-            Sells[5, 3].Figure = Figures[0];
-            
         }
-
-        /// <summary>
-        /// Возаращает список клеток на которые может пойти фигугра, находящаяся в выбранной координате
-        /// </summary>
-        /// <param name="x">Выбранная координата</param>
-        /// <param name="y">Выбранная координата</param>
-        /// <returns></returns>
-        public List<Sell> FindAvaibleSells(int x, int y, out Figure choosedFigure)
+        public Board(Sell[,] sells)
         {
-            choosedFigure = null;
-
-            try
-            {
-                choosedFigure = Sells[x, y].Figure;
-            }
-            catch
-            {
-                throw new Exception("Out of board bounds");
-            }
-
-            return choosedFigure?.GetAvaibleSells(Sells[x, y], Sells);
+            Sells = sells;
         }
 
+        public Figure GetFigure(int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
+                throw new ArgumentException("Out of board bounds");
+
+            return Sells[x, y].Figure;
+        }
 
         public static Sell[,] GetEmptyBoard()
         {
-            Sell[,] sells = new Sell[8, 8];
+            Sell[,] sells = new Sell[SIZE, SIZE];
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < SIZE; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < SIZE; j++)
                 {
                     sells[i, j] = new Sell() { X = i, Y = j };
                 }

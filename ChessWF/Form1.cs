@@ -20,14 +20,6 @@ namespace ChessWF
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var board = new Board();
-            Figure f;
-            var sells = board.FindAvaibleSells(4, 4, out f);
-
-            foreach (var sell in sells)
-            {
-                textBox1.Text += sell.ToString() + " ";
-            }
 
         }
 
