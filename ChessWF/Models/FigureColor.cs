@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models
 {
-    public enum FigureType
+    public enum FigureColor
     {
-        Pawn,
-        Knight
+        White,
+        Black
     }
 }

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models
 {
-    abstract class Figure
+    public abstract class Figure
     {
-        public readonly bool IsBlack;
+        public readonly FigureColor Color;
         public readonly string Image;
 
-        public event Action FigureMoved;
+        public bool Moved { get; private set; } = false;
 
-        public Figure(string image, bool isBlack = false)
+        public Figure(string image, FigureColor color = FigureColor.Black)
         {
-            IsBlack = isBlack;
+            Color = color;
             Image = image;
         }
 
@@ -23,7 +23,11 @@ namespace ChessWF.Models
         {
             //Sell.Image = null;
             //Sell.Image = Images[FigureType];
-            FigureMoved?.Invoke();
+
+            if (newSell == null) throw new ArgumentNullException("newsell is null");
+
+            newSell.Figure = this;
+            Moved = true;
         }
 
         public abstract List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells);
@@ -32,7 +36,7 @@ namespace ChessWF.Models
         {
             try
             {
-                if (boardSells[x, y].Figure?.IsBlack == IsBlack) return false;
+                if (boardSells[x, y].Figure?.Color == Color) return false;
             }
             catch
             {

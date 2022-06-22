@@ -53,6 +53,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Board.cs" />
+    <Compile Include="Models\FigureColor.cs" />
     <Compile Include="Models\Figures\Bishop.cs" />
     <Compile Include="Models\Figures\Knight.cs" />
     <Compile Include="Models\Figures\Pawn.cs" />

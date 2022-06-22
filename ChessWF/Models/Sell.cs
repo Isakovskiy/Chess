@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models
 {
-    class Sell
+    public class Sell
     {
         public Figure Figure { get; set; }
         public string Image { get; set; }

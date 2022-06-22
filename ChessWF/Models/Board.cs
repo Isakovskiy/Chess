@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models
 {
-    internal class Board
+    public class Board
     {
         public const int SIZE = 8;
         public Sell[,] Sells { get; set; }
@@ -15,15 +15,7 @@ namespace ChessWF.Models
         public List<Figure> Figures { get; set; }
         public Board()
         {
-            Sells = new Sell[8, 8];
-
-            for(int i = 0; i < SIZE; i++)
-            {
-                for(int j = 0; j < SIZE; j++)
-                {
-                    Sells[i, j] = new Sell() { X = i, Y = j};
-                }
-            }
+            Sells = GetEmptyBoard();
 
             Figures = new List<Figure>();
             Figures.Add(new Bishop(image: "im"));
@@ -57,5 +49,20 @@ namespace ChessWF.Models
             return choosedFigure?.GetAvaibleSells(Sells[x, y], Sells);
         }
 
+
+        public static Sell[,] GetEmptyBoard()
+        {
+            Sell[,] sells = new Sell[8, 8];
+
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    sells[i, j] = new Sell() { X = i, Y = j };
+                }
+            }
+
+            return sells;
+        }
     }
 }

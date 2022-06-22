@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models.Figures
 {
-    class Knight : Figure
+    public class Knight : Figure
     {
-        public Knight(string image, bool isBlack = false) : base(image, isBlack)
+        public Knight(string image, FigureColor color = FigureColor.Black) : base(image, color)
         {
         }
 

@@ -6,24 +6,31 @@ using System.Threading.Tasks;
 
 namespace ChessWF.Models.Figures
 {
-    class Pawn : Figure
+    public class Pawn : Figure
     {
-        private bool _moved = false;
-
-        public Pawn(string image, bool isBlack = false) : base(image, isBlack)
+        public Pawn(string image, FigureColor color = FigureColor.Black) : base(image, color)
         {
-            FigureMoved += () => _moved = true;
         }
         public override List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells)
         {
             var list = new List<Sell>();
-            var dir = IsBlack ? -1 : 1;
+            var dir = Color == FigureColor.Black ? -1 : 1;
 
 
-            if (!_moved)
+            if (!Moved)
             {
-                list.Add(boardSells[figureSell.X, figureSell.Y + dir]);
-                list.Add(boardSells[figureSell.X, figureSell.Y + dir * 2]);
+                for(int i = 1; i <= 2; i++)
+                {
+                    if (CanMoveTo(figureSell.X, figureSell.Y + dir * i, boardSells))
+                    {
+                        list.Add(boardSells[figureSell.X, figureSell.Y + dir * i]);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                        
+                }
             }
             else
             {
