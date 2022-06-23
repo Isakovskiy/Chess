@@ -8,11 +8,9 @@ namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
-		{
-		}
+		public King(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color) { }
 
-		public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
+        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
 		{
 			var list = new List<Sell>();
 			Tuple<int, int>[] tuple = new Tuple<int, int>[8]
@@ -38,13 +36,14 @@ namespace Domain.Models.Figures
 				}
 			}
 
-			//roque
-			for (int direction = -1; direction <= 1; direction += 2) 
+			if (!Moved)
 			{
-				if (!Moved)
-				{
+				//roque
+				for (int direction = -1; direction <= 1; direction += 2)
+                {
 					int x = CurrentSell.X + direction;
 					int y = CurrentSell.Y;
+
 					while (true)
 					{
 						if (x < 0 || x > 7)
@@ -54,12 +53,13 @@ namespace Domain.Models.Figures
 							list.Add(boardSells[CurrentSell.X += direction * 2, CurrentSell.Y]);
 							break;
 						}
-						else if(boardSells[x, y].Figure != null)
+						else if (boardSells[x, y].Figure != null)
 							break;
 						x += direction;
 					}
 				}
 			}
+
 			return list;
 		}
 	}
