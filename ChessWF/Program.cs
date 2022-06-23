@@ -1,5 +1,4 @@
-﻿using ChessWF.Models;
-using ChessWF.Models.Figures;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
