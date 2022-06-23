@@ -1,11 +1,11 @@
-﻿using ChessWF.Models.Figures;
+﻿using Domain.Models.Figures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessWF.Models
+namespace Domain.Models
 {
     public class Board
     {
@@ -26,6 +26,20 @@ namespace ChessWF.Models
                 throw new ArgumentException("Out of board bounds");
 
             return Sells[x, y].Figure;
+        }
+
+        public IEnumerable<Figure> GetFigures(Func<Figure, bool> predicate)
+        {
+            for(int x = 0; x < SIZE; x++)
+            {
+                for(var y = 0; y < SIZE; y++)
+                {
+                    if(Sells[x, y].Figure != null && predicate(Sells[x, y].Figure))
+                    {
+                        yield return Sells[x, y].Figure;
+                    }
+                }
+            }
         }
 
         public static Sell[,] GetEmptyBoard()

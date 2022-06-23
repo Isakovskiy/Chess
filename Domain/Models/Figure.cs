@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace ChessWF.Models
+namespace Domain.Models
 {
     public abstract class Figure
     {
@@ -12,14 +8,17 @@ namespace ChessWF.Models
         public readonly string Image;
 
         public bool Moved { get; private set; } = false;
+        public Sell CurrentSell { get; protected set; }
 
-        public Figure(string image, FigureColor color = FigureColor.Black)
+        public Figure(string image, Sell sell, FigureColor color = FigureColor.Black)
         {
             Color = color;
             Image = image;
+            CurrentSell = sell;
+            CurrentSell.Figure = this;
         }
 
-        public void Move(Sell newSell)
+        public virtual void Move(Sell newSell)
         {
             //Sell.Image = null;
             //Sell.Image = Images[FigureType];
@@ -27,10 +26,14 @@ namespace ChessWF.Models
             if (newSell == null) throw new ArgumentNullException("newsell is null");
 
             newSell.Figure = this;
+            
+            CurrentSell.Figure = null;
+            CurrentSell = newSell;
+
             Moved = true;
         }
 
-        public abstract List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells);
+        public abstract List<Sell> GetAvaibleSells(Sell[,] boardSells);
 
         protected bool CanMoveTo(int x, int y, Sell[,] boardSells)
         {

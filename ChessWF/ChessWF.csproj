@@ -52,17 +52,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Board.cs" />
-    <Compile Include="Models\FigureColor.cs" />
-    <Compile Include="Models\Figures\Bishop.cs" />
-    <Compile Include="Models\Figures\King.cs" />
-    <Compile Include="Models\Figures\Knight.cs" />
-    <Compile Include="Models\Figures\Pawn.cs" />
-    <Compile Include="Models\Figures\Queen.cs" />
-    <Compile Include="Models\Figures\Rook.cs" />
-    <Compile Include="Models\FigureType.cs" />
-    <Compile Include="Models\Figure.cs" />
-    <Compile Include="Models\Sell.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

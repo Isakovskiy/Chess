@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessWF.Models.Figures
+namespace Domain.Models.Figures
 {
     public class Bishop : Figure
     {
-        public Bishop(string image, FigureColor color = FigureColor.Black) : base(image, color)
+        public Bishop(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
         {
         }
 
-        public override List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells)
+        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
         {
             var list = new List<Sell>();
 
@@ -20,8 +20,8 @@ namespace ChessWF.Models.Figures
             {
                 for(int j = -1; j <= 1; j += 2)
                 {
-                    var x = figureSell.X + i;
-                    var y = figureSell.Y + j;
+                    var x = CurrentSell.X + i;
+                    var y = CurrentSell.Y + j;
                     while (CanMoveTo(x, y, boardSells))
                     {
                         list.Add(boardSells[x, y]);

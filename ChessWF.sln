@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessWF", "ChessWF\ChessWF.csproj", "{A87EA5A8-1ED8-428C-8FBC-CFABBD7FEB10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{92AB4D67-A709-4804-85FB-06307DCC52BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{92AB4D67-A709-4804-85FB-06307DCC52BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{51B57334-8605-48A0-B22B-B1ACDE286C79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{92AB4D67-A709-4804-85FB-06307DCC52BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92AB4D67-A709-4804-85FB-06307DCC52BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92AB4D67-A709-4804-85FB-06307DCC52BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51B57334-8605-48A0-B22B-B1ACDE286C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51B57334-8605-48A0-B22B-B1ACDE286C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51B57334-8605-48A0-B22B-B1ACDE286C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51B57334-8605-48A0-B22B-B1ACDE286C79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

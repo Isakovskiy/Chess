@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessWF.Models.Figures
+namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(string image, FigureColor color = FigureColor.Black) : base(image, color)
+		public King(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
 		{
 		}
 
-		public override List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells)
+		public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
 		{
 			var list = new List<Sell>();
 			Tuple<int, int>[] tuple = new Tuple<int, int>[8]
@@ -29,8 +29,8 @@ namespace ChessWF.Models.Figures
 
 			for (int i = 0; i < tuple.Length; i++)
 			{
-				int x = figureSell.X + tuple[i].Item1;
-				int y = figureSell.Y + tuple[i].Item2;
+				int x = CurrentSell.X + tuple[i].Item1;
+				int y = CurrentSell.Y + tuple[i].Item2;
 
 				if (CanMoveTo(x, y, boardSells))
 				{
@@ -43,15 +43,15 @@ namespace ChessWF.Models.Figures
 			{
 				if (!Moved)
 				{
-					int x = figureSell.X + direction;
-					int y = figureSell.Y;
+					int x = CurrentSell.X + direction;
+					int y = CurrentSell.Y;
 					while (true)
 					{
 						if (x < 0 || x > 7)
 							break;
 						if (boardSells[x, y].Figure is Rook && !boardSells[x, y].Figure.Moved)
 						{
-							list.Add(boardSells[figureSell.X += direction * 2, figureSell.Y]);
+							list.Add(boardSells[CurrentSell.X += direction * 2, CurrentSell.Y]);
 							break;
 						}
 						else if(boardSells[x, y].Figure != null)

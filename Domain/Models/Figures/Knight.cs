@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChessWF.Models.Figures
+namespace Domain.Models.Figures
 {
     public class Knight : Figure
     {
-        public Knight(string image, FigureColor color = FigureColor.Black) : base(image, color)
+        public Knight(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
         {
         }
 
-        public override List<Sell> GetAvaibleSells(Sell figureSell, Sell[,] boardSells)
+        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
         {
             var list = new List<Sell>();
             Tuple<int, int>[] tuple = new Tuple<int, int>[8]
@@ -30,8 +30,8 @@ namespace ChessWF.Models.Figures
 
             for(int i = 0; i < tuple.Length; i++)
             {
-                int x = figureSell.X + tuple[i].Item1;
-                int y = figureSell.Y + tuple[i].Item2;
+                int x = CurrentSell.X + tuple[i].Item1;
+                int y = CurrentSell.Y + tuple[i].Item2;
 
                 if (CanMoveTo(x, y, boardSells))
                 {

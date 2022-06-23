@@ -1,5 +1,5 @@
-﻿using ChessWF.Models.Figures;
-using ChessWF.Models;
+﻿using Domain.Models.Figures;
+using Domain.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -20,23 +20,23 @@ namespace UnitTests
 		[Test]
 		public void GetAvaibleSellsTest()
 		{
-			var k = new King("fake", FigureColor.White);
 			var board = Board.GetEmptyBoard();
+			var k = new King("fake", board[4, 0], FigureColor.White);
 
-			var list = k.GetAvaibleSells(board[4, 0], board);
+			var list = k.GetAvaibleSells(board);
 			Assert.IsTrue(list.Count == 5);
 
-			board[3, 0].Figure = new Queen("fake");
-			board[5, 0].Figure = new Queen("fake", FigureColor.White);
+			var q1 = new Queen("fake", board[3, 0]);
+			var q2 = new Queen("fake", board[5, 0], FigureColor.White);
 
-			list = k.GetAvaibleSells(board[4, 0], board);
+			list = k.GetAvaibleSells(board);
 			Assert.IsTrue(list.Count == 4);
 
-			board[0, 0].Figure = new Rook("fake", FigureColor.White);
-			board[7, 0].Figure = new Rook("fake", FigureColor.White);
-			board[3, 0].Figure = null;
+			var r = new Rook("fake", board[0, 0], FigureColor.White);
+			r = new Rook("fake", board[7, 0], FigureColor.White);
+			q1.Move(board[7, 7]);
 
-			list = k.GetAvaibleSells(board[4, 0], board);
+			list = k.GetAvaibleSells(board);
 			Assert.IsTrue(list.Count == 5 && list.Contains(board[2, 0]));
 		}
 	}
