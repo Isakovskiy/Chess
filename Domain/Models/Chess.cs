@@ -23,6 +23,7 @@ namespace Domain.Models
             //Создаем фигуры
 
             _board = new Board(sells);
+            Painter.Draw(_board.Sells);
 
         }
 
@@ -38,6 +39,8 @@ namespace Domain.Models
             {
                 return;
             }
+
+            Painter.ResetAvaibleSells();
 
             if(figure != null && figure.Color == GoingPlayer)
             {
