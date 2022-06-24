@@ -45,8 +45,15 @@ namespace Domain.Models.Figures
 
             if(newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
             {
-                var newFigure = FiguresPainter.DrawFigureReplaceSelection(newCell);
-                //newFigure.
+                var newFigureType = FiguresPainter.DrawFigureReplaceSelectionAndGet();
+                switch (newFigureType)
+                {
+                    case TransformFigures.Rook:
+                        break;
+                    case TransformFigures.Queen:
+                        break;
+
+                }
             }
         }
 

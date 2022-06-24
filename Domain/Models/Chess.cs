@@ -35,10 +35,11 @@ namespace Domain.Models
             {
                 return;
             }
-
+            
             BoardPainter.ResetAvaibleCells();
+            _choosedFigure = null;
 
-            if(figure != null && figure.Color == GoingPlayer)
+            if (figure != null && figure.Color == GoingPlayer)
             {
                 _choosedFigure = figure;
                 
@@ -110,7 +111,7 @@ namespace Domain.Models
             {
                 foreach(var avaibleCell in enemyFigures[i].GetAvaibleCells(_board.Cells))
                 {
-                    enemyFigures[i].ChangeSell(avaibleCell);
+                    enemyFigures[i].ChangeCell(avaibleCell);
 
                     if (ourFigures.All(f => !Check(f)))
                     {
@@ -148,7 +149,7 @@ namespace Domain.Models
         {
             foreach (var f in figures)
             {
-                f.Item1.ChangeSell(f.Item2);
+                f.Item1.ChangeCell(f.Item2);
             }
         }
 
@@ -166,7 +167,7 @@ namespace Domain.Models
             {
                 for (int i = 0; i < sells.Count; i++)
                 {
-                    figure.ChangeSell(sells[i]);
+                    figure.ChangeCell(sells[i]);
                     var enemyFigures = board.GetFigures(predicate: f => f.Color != figure.Color).ToList();
 
                     for(int j = 0; j < enemyFigures.Count(); j++)

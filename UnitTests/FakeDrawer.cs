@@ -40,5 +40,15 @@ namespace UnitTests
         {
 			return new Queen(image: "fake", figureCell, new FakeFiguresDrawer(), figureCell.Figure.Color);
         }
+
+        public TransformFigures GetChoice()
+        {
+			return TransformFigures.Queen;
+        }
+
+        void IFiguresPainter.DrawFigureReplaceSelection(Cell figureCell)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

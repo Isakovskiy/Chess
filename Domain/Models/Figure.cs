@@ -27,19 +27,19 @@ namespace Domain.Models
             //Sell.Image = null;
             //Sell.Image = Images[FigureType];
 
-            ChangeSell(newSell);
+            ChangeCell(newSell);
 
             Moved = true;
         }
 
-        public virtual void ChangeSell(Cell newSell)
+        public virtual void ChangeCell(Cell newCell)
         {
-            if (newSell == null) throw new ArgumentNullException("newsell is null");
+            if (newCell == null) throw new ArgumentNullException("newsell is null");
 
             CurrentCell.Figure = null;
-            newSell.Figure = this;
+            newCell.Figure = this;
 
-            CurrentCell = newSell;
+            CurrentCell = newCell;
         }
 
         public abstract List<Cell> GetAvaibleCells(Cell[,] boardCells);
