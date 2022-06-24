@@ -40,5 +40,10 @@ namespace UnitTests
         {
 			return TransformFigures.Queen;
         }
-    }
+
+		public void MoveFigure(Cell from, Cell to)
+		{
+			
+		}
+	}
 }

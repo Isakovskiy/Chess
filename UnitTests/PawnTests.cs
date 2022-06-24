@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using Domain.Models.Figures;
+using Domain.Models;
+using NUnit.Framework;
 
 
 
@@ -37,5 +39,18 @@ namespace UnitTests
             //Assert.IsTrue(list[0] == sells[3, 3] && list.Count == 1);
         }
 
+        [Test]
+        public void TransformTest()
+        {
+			var painter = new FakeDrawer();
+			var f = new FakeFiguresDrawer();
+			Chess chess = new Chess(painter, new FakeFiguresDrawer());
+			var board = painter.Cells;
+			var pawnW = new Pawn(board[3, 6], f, FigureColor.White);
+
+            chess.ChooseFigure(3, 6);
+            chess.Move(board[3, 7]);
+            Assert.IsTrue(board[3, 7].Figure is Queen);
+		}
     }
 }
