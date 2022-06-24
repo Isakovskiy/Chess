@@ -57,12 +57,20 @@ namespace Domain.Models
             if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toSell))
             {
                 _choosedFigure.Move(toSell);
+                GoingPlayer = GoingPlayer.Reverese();
 
                 Painter.ResetAvaibleSells();
                 Painter.DrawBoard(_board.Sells);
 
-                if (Check(_choosedFigure.Color.Reverese())) return CheckMate(_choosedFigure.Color.Reverese());
-                GoingPlayer = GoingPlayer.Reverese();
+                if (Draw)
+                {
+                    return GameResult.Draw;
+                }
+                else if (Check(_choosedFigure.Color.Reverese()))
+                {
+                    return CheckMate(_choosedFigure.Color.Reverese());
+                }
+                
             }
 
             return GameResult.Going;
@@ -79,14 +87,13 @@ namespace Domain.Models
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
-        private bool Check(Figure figure) // шах
-        {
-            if(figure is Rook)
-            {
+        private bool Check(Figure figure) => // шах
+             figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
 
-            }
-            return figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
-        }
+
+        private bool Draw =>
+            !Check(GoingPlayer) && 
+            _board.GetFigures(f => f.Color == GoingPlayer).Select(f => f.GetAvaibleSells(_board.Sells)).Count() == 0;
 
 
         private GameResult CheckMate(FigureColor enemyColor) // шах и мат
