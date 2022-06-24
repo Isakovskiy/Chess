@@ -25,8 +25,8 @@ namespace Domain.Models.Figures
                     while (CanMoveTo(x, y, boardSells))
                     {
                         list.Add(boardSells[x, y]);
-
-                        x += i;
+						if (boardSells[x, y].Figure != null) break;
+						x += i;
                         y += j;
                     }
                 }

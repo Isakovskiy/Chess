@@ -13,30 +13,6 @@ namespace UnitTests
         {
 
         }
-        class FakeDrawer : IBoardPainter
-        {
-            public List<Sell> AvaibleSells { get; set; }
-            public Sell[,] Sells { get; set; }
-            public Figure ChoosedFigure { get; set; }
-
-            public void DrawBoard(Sell[,] sells)
-            {
-                Sells = sells;
-            }
-            public void ResetAvaibleSells()
-            {
-                AvaibleSells = null;
-            }
-            public void DrawAvaibleSells(List<Sell> avaibleSells)
-            {
-                AvaibleSells = avaibleSells;
-            }
-            public void ChooseFigure(Sell figureSell)
-            {
-                ChoosedFigure = figureSell.Figure;
-            }
-        }
-
         [Test]
         public void ChooseFigureTest()
         {

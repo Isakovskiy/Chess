@@ -19,6 +19,7 @@ namespace Domain.Models.Figures
 				while (CanMoveTo(x, y, boardSells))
 				{
 					list.Add(boardSells[x, y]);
+					if (boardSells[x, y].Figure != null) break;
 					x += i;
 				}
 			}	
@@ -30,6 +31,7 @@ namespace Domain.Models.Figures
 				while (CanMoveTo(x, y, boardSells))
 				{
 					list.Add(boardSells[x, y]);
+					if (boardSells[x, y].Figure != null) break;
 					y += i;
 				}
 			}

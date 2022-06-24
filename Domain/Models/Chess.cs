@@ -80,7 +80,14 @@ namespace Domain.Models
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
         private bool Check(Figure figure) // шах
-            => figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
+        {
+            if(figure is Rook)
+            {
+
+            }
+            return figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
+        }
+
 
         private GameResult CheckMate(FigureColor enemyColor) // шах и мат
         {
@@ -94,9 +101,9 @@ namespace Domain.Models
             {
                 foreach(var avaibleSell in enemyFigures[i].GetAvaibleSells(_board.Sells))
                 {
-                    enemyFigures[i].Move(avaibleSell);
+                    enemyFigures[i].ChangeSell(avaibleSell);
 
-                    if (ourFigures.IsEveryone(f => !Check(f)))
+                    if (ourFigures.All(f => !Check(f)))
                     {
                         realBoard.ReturnFigures();
                         return GameResult.Going;
@@ -150,7 +157,7 @@ namespace Domain.Models
             {
                 for (int i = 0; i < sells.Count; i++)
                 {
-                    figure.Move(sells[i]);
+                    figure.ChangeSell(sells[i]);
                     var enemyFigures = board.GetFigures(predicate: f => f.Color != figure.Color).ToList();
 
                     for(int j = 0; j < enemyFigures.Count(); j++)
