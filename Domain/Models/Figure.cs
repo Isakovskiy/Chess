@@ -5,16 +5,13 @@ namespace Domain.Models
     public abstract class Figure
     {
         public readonly FigureColor Color;
-        public readonly string Image;
-
         public bool Moved { get; private set; } = false;
         public Cell CurrentCell { get; protected set; }
         public IFiguresPainter FiguresPainter { get; set; }
 
-        public Figure(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black)
+        public Figure(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black)
         {
             Color = color;
-            Image = image;
             CurrentCell = sell;
             CurrentCell.Figure = this;
             FiguresPainter = figuresPainter;
@@ -28,7 +25,8 @@ namespace Domain.Models
             //Sell.Image = Images[FigureType];
 
             ChangeCell(newSell);
-
+            FiguresPainter.MoveFigure(CurrentCell, newSell);
+            
             Moved = true;
         }
 

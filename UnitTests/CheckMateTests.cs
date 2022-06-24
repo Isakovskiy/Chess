@@ -20,11 +20,11 @@ namespace UnitTests
 			var painter = new FakeDrawer();
 			Chess chess = new Chess(painter, new FakeFiguresDrawer());
 			var board = painter.Cells;
-			var kingW = new King("fake", board[4, 0], new FakeFiguresDrawer(), FigureColor.White);
-			var pawnW = new Pawn("fake", board[4, 1], new FakeFiguresDrawer(), FigureColor.White);
-			var pawnW2 = new Pawn("fake", board[0, 1], new FakeFiguresDrawer(), FigureColor.White);
-			var rookB = new Rook("fake", board[4, 7], new FakeFiguresDrawer());
-			var queenB = new Queen("fake", board[4, 3], new FakeFiguresDrawer());
+			var kingW = new King(board[4, 0], new FakeFiguresDrawer(), FigureColor.White);
+			var pawnW = new Pawn(board[4, 1], new FakeFiguresDrawer(), FigureColor.White);
+			var pawnW2 = new Pawn(board[0, 1], new FakeFiguresDrawer(), FigureColor.White);
+			var rookB = new Rook(board[4, 7], new FakeFiguresDrawer());
+			var queenB = new Queen(board[4, 3], new FakeFiguresDrawer());
 
 
 			chess.ChooseFigure(0, 1);

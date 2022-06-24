@@ -36,19 +36,9 @@ namespace UnitTests
 			ChoosedFigure = figureSell.Figure;
 
 		}
-        public Figure DrawFigureReplaceSelection(Cell figureCell)
-        {
-			return new Queen(image: "fake", figureCell, new FakeFiguresDrawer(), figureCell.Figure.Color);
-        }
-
-        public TransformFigures GetChoice()
+        public TransformFigures DrawFigureReplaceSelectionAndGet()
         {
 			return TransformFigures.Queen;
-        }
-
-        void IFiguresPainter.DrawFigureReplaceSelection(Cell figureCell)
-        {
-            throw new NotImplementedException();
         }
     }
 }
