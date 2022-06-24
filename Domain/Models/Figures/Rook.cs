@@ -4,7 +4,7 @@ namespace Domain.Models.Figures
 {
 	public class Rook : Figure
 	{
-		public Rook(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
+		public Rook(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
 		{
 
 		}

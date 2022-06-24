@@ -4,22 +4,24 @@ namespace Domain.Models
 {
     public class Chess
     {
-        public Chess(IBoardPainter painter)
+        public Chess(IBoardPainter boardPainter, IFiguresPainter figuresPainter)
         {
-            Painter = painter;
+            BoardPainter = boardPainter;
+            FiguresPainter = figuresPainter;
             var cells = Board.GetEmptyBoard();
 
             //Создаем фигуры
 
             _board = new Board(cells);
-            Painter.DrawBoard(_board.Cells);
+            BoardPainter.DrawBoard(_board.Cells);
         }
 
         private Board _board;
         private Figure? _choosedFigure = null;
 
         public FigureColor GoingPlayer { get; set; } = FigureColor.White;
-        public IBoardPainter Painter { get; set; }
+        public IBoardPainter BoardPainter { get; set; }
+        public IFiguresPainter FiguresPainter { get; set; }
 
         public void ChooseFigure(int x, int y)
         {
@@ -34,7 +36,7 @@ namespace Domain.Models
                 return;
             }
 
-            Painter.ResetAvaibleSells();
+            BoardPainter.ResetAvaibleCells();
 
             if(figure != null && figure.Color == GoingPlayer)
             {
@@ -42,8 +44,8 @@ namespace Domain.Models
                 
                 var avaibleSells = _choosedFigure.GetAvaibleCells(_board.Cells).RemoveBannedMoves(_choosedFigure, _board);
 
-                Painter.ChooseFigure(_choosedFigure.CurrentCell);
-                Painter.DrawAvaibleSells(avaibleSells);
+                FiguresPainter.ChooseFigure(_choosedFigure.CurrentCell);
+                BoardPainter.DrawAvaibleCells(avaibleSells);
             }
         }
         
@@ -59,8 +61,8 @@ namespace Domain.Models
                 _choosedFigure.Move(toCell);
                 GoingPlayer = GoingPlayer.Reverese();
 
-                Painter.ResetAvaibleSells();
-                Painter.DrawBoard(_board.Cells);
+                BoardPainter.ResetAvaibleCells();
+                BoardPainter.DrawBoard(_board.Cells);
 
                 if (Draw)
                 {
