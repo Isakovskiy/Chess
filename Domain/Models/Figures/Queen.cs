@@ -8,18 +8,18 @@ namespace Domain.Models.Figures
 {
     public class Queen : Figure
     {
-        public Queen(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
+        public Queen(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
         {
         }
 		
-        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
-            var list = new List<Sell>();
+            var list = new List<Cell>();
 
 			for (int i = -1; i <= 1; i += 2)
 			{
-				int x = CurrentSell.X + i;
-				int y = CurrentSell.Y;
+				int x = CurrentCell.X + i;
+				int y = CurrentCell.Y;
 				while (CanMoveTo(x, y, boardSells))
 				{
 					list.Add(boardSells[x, y]);
@@ -27,8 +27,8 @@ namespace Domain.Models.Figures
 					x += i;
 				}
 
-				x = CurrentSell.X;
-				y = CurrentSell.Y + i;
+				x = CurrentCell.X;
+				y = CurrentCell.Y + i;
 				while (CanMoveTo(x, y, boardSells))
 				{
 					list.Add(boardSells[x, y]);
@@ -38,8 +38,8 @@ namespace Domain.Models.Figures
 
 				for (int j = -1; j <= 1; j += 2)
 				{
-					x = CurrentSell.X + i;
-					y = CurrentSell.Y + j;
+					x = CurrentCell.X + i;
+					y = CurrentCell.Y + j;
 					while (CanMoveTo(x, y, boardSells))
 					{
 						list.Add(boardSells[x, y]);

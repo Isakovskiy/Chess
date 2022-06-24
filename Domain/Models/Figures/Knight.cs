@@ -8,13 +8,13 @@ namespace Domain.Models.Figures
 {
     public class Knight : Figure
     {
-        public Knight(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
+        public Knight(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
         {
         }
 
-        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
-            var list = new List<Sell>();
+            var list = new List<Cell>();
             Tuple<int, int>[] tuple = new Tuple<int, int>[8]
             {
                 new Tuple<int, int>(-2, 1),
@@ -30,8 +30,8 @@ namespace Domain.Models.Figures
 
             for(int i = 0; i < tuple.Length; i++)
             {
-                int x = CurrentSell.X + tuple[i].Item1;
-                int y = CurrentSell.Y + tuple[i].Item2;
+                int x = CurrentCell.X + tuple[i].Item1;
+                int y = CurrentCell.Y + tuple[i].Item2;
 
                 if (CanMoveTo(x, y, boardSells))
                 {

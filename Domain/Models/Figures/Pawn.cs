@@ -8,16 +8,16 @@ namespace Domain.Models.Figures
 {
     public class Pawn : Figure
     {
-        public Pawn(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
+        public Pawn(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
         {
         }
-        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
-            var list = new List<Sell>();
+            var list = new List<Cell>();
             var dir = Color == FigureColor.Black ? -1 : 1;
 
-            var x = CurrentSell.X;
-            var y = CurrentSell.Y;
+            var x = CurrentCell.X;
+            var y = CurrentCell.Y;
 
             if (CanMoveTo(x, y + dir, boardSells))
             {

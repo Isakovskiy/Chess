@@ -10,11 +10,11 @@ namespace UnitTests
 {
 	class FakeDrawer : IBoardPainter
 	{
-		public List<Sell> AvaibleSells { get; set; }
-		public Sell[,] Sells { get; set; }
+		public List<Cell> AvaibleSells { get; set; }
+		public Cell[,] Sells { get; set; }
 		public Figure ChoosedFigure { get; set; }
 
-		public void DrawBoard(Sell[,] sells)
+		public void DrawBoard(Cell[,] sells)
 		{
 			Sells = sells;
 		}
@@ -22,11 +22,11 @@ namespace UnitTests
 		{
 			AvaibleSells = null;
 		}
-		public void DrawAvaibleSells(List<Sell> avaibleSells)
+		public void DrawAvaibleSells(List<Cell> avaibleSells)
 		{
 			AvaibleSells = avaibleSells;
 		}
-		public void ChooseFigure(Sell figureSell)
+		public void ChooseFigure(Cell figureSell)
 		{
 			ChoosedFigure = figureSell.Figure;
 		}

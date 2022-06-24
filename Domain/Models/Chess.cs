@@ -7,12 +7,12 @@ namespace Domain.Models
         public Chess(IBoardPainter painter)
         {
             Painter = painter;
-            var sells = Board.GetEmptyBoard();
+            var cells = Board.GetEmptyBoard();
 
             //Создаем фигуры
 
-            _board = new Board(sells);
-            Painter.DrawBoard(_board.Sells);
+            _board = new Board(cells);
+            Painter.DrawBoard(_board.Cells);
         }
 
         private Board _board;
@@ -40,27 +40,27 @@ namespace Domain.Models
             {
                 _choosedFigure = figure;
                 
-                var avaibleSells = _choosedFigure.GetAvaibleSells(_board.Sells).RemoveBannedMoves(_choosedFigure, _board);
+                var avaibleSells = _choosedFigure.GetAvaibleCells(_board.Cells).RemoveBannedMoves(_choosedFigure, _board);
 
-                Painter.ChooseFigure(_choosedFigure.CurrentSell);
+                Painter.ChooseFigure(_choosedFigure.CurrentCell);
                 Painter.DrawAvaibleSells(avaibleSells);
             }
         }
         
-        public GameResult Move(Sell toSell)
+        public GameResult Move(Cell toCell)
         {
-            if(toSell == null)
+            if(toCell == null)
             {
                 throw new ArgumentNullException();
             }
-            List<Sell>? avaibleSells = _choosedFigure?.GetAvaibleSells(_board.Sells);
-            if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toSell))
+            List<Cell>? avaibleSells = _choosedFigure?.GetAvaibleCells(_board.Cells);
+            if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toCell))
             {
-                _choosedFigure.Move(toSell);
+                _choosedFigure.Move(toCell);
                 GoingPlayer = GoingPlayer.Reverese();
 
                 Painter.ResetAvaibleSells();
-                Painter.DrawBoard(_board.Sells);
+                Painter.DrawBoard(_board.Cells);
 
                 if (Draw)
                 {
@@ -79,21 +79,21 @@ namespace Domain.Models
         private bool Check(FigureColor enemyColor) // шах
         {
             var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
-            var allSells = new List<Sell>();
+            var allSells = new List<Cell>();
 
             foreach(var f in ourFigures)
             {
-                allSells.AddRange(f.GetAvaibleSells(_board.Sells));
+                allSells.AddRange(f.GetAvaibleCells(_board.Cells));
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
         private bool Check(Figure figure) => // шах
-             figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
+             figure.GetAvaibleCells(_board.Cells).FirstOrDefault(s => s.Figure is King) != null;
 
 
         private bool Draw =>
             !Check(GoingPlayer) && 
-            _board.GetFigures(f => f.Color == GoingPlayer).Select(f => f.GetAvaibleSells(_board.Sells)).Count() == 0;
+            _board.GetFigures(f => f.Color == GoingPlayer).Select(f => f.GetAvaibleCells(_board.Cells)).Count() == 0;
 
 
         private GameResult CheckMate(FigureColor enemyColor) // шах и мат
@@ -101,14 +101,14 @@ namespace Domain.Models
             var enemyFigures = _board.GetFigures(f => f.Color == enemyColor).ToList();
             var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
 
-            var realBoard = new List<Tuple<Figure, Sell>>();
+            var realBoard = new List<Tuple<Figure, Cell>>();
             realBoard.AddRange(_board.GetFigures()); // сохраняем все начальные позиции
 
             for (int i = 0; i < enemyFigures.Count; i++)
             {
-                foreach(var avaibleSell in enemyFigures[i].GetAvaibleSells(_board.Sells))
+                foreach(var avaibleCell in enemyFigures[i].GetAvaibleCells(_board.Cells))
                 {
-                    enemyFigures[i].ChangeSell(avaibleSell);
+                    enemyFigures[i].ChangeSell(avaibleCell);
 
                     if (ourFigures.All(f => !Check(f)))
                     {
@@ -142,7 +142,7 @@ namespace Domain.Models
             return true;
         }
 
-        public static void ReturnFigures(this List<Tuple<Figure, Sell>> figures)
+        public static void ReturnFigures(this List<Tuple<Figure, Cell>> figures)
         {
             foreach (var f in figures)
             {
@@ -150,14 +150,14 @@ namespace Domain.Models
             }
         }
 
-        public static List<Sell> RemoveBannedMoves(this List<Sell> sells, Figure figure, Board board)
+        public static List<Cell> RemoveBannedMoves(this List<Cell> sells, Figure figure, Board board)
         {
             if(figure == null || board == null)
             {
                 throw new ArgumentNullException();
             }
 
-            var realBoard = new List<Tuple<Figure, Sell>>();
+            var realBoard = new List<Tuple<Figure, Cell>>();
             realBoard.AddRange(board.GetFigures()); // сохраняем все начальные позиции
 
             try
@@ -169,7 +169,7 @@ namespace Domain.Models
 
                     for(int j = 0; j < enemyFigures.Count(); j++)
                     {
-                        var avaibleMoves = enemyFigures[j].GetAvaibleSells(board.Sells);
+                        var avaibleMoves = enemyFigures[j].GetAvaibleCells(board.Cells);
                         if(avaibleMoves.FirstOrDefault(s => s.Figure is King && s.Figure.Color == figure.Color) != null)
                         {
                             sells.RemoveAt(i);

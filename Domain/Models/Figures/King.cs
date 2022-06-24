@@ -8,11 +8,11 @@ namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(string image, Sell sell, FigureColor color = FigureColor.Black) : base(image, sell, color) { }
+		public King(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color) { }
 
-        public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
 		{
-			var list = new List<Sell>();
+			var list = new List<Cell>();
 			Tuple<int, int>[] tuple = new Tuple<int, int>[8]
 			{
 				new Tuple<int, int>(0, 1),
@@ -27,8 +27,8 @@ namespace Domain.Models.Figures
 
 			for (int i = 0; i < tuple.Length; i++)
 			{
-				int x = CurrentSell.X + tuple[i].Item1;
-				int y = CurrentSell.Y + tuple[i].Item2;
+				int x = CurrentCell.X + tuple[i].Item1;
+				int y = CurrentCell.Y + tuple[i].Item2;
 
 				if (CanMoveTo(x, y, boardSells))
 				{
@@ -41,8 +41,8 @@ namespace Domain.Models.Figures
 				//roque
 				for (int direction = -1; direction <= 1; direction += 2)
                 {
-					int x = CurrentSell.X + direction;
-					int y = CurrentSell.Y;
+					int x = CurrentCell.X + direction;
+					int y = CurrentCell.Y;
 
 					while (true)
 					{
@@ -50,7 +50,7 @@ namespace Domain.Models.Figures
 							break;
 						if (boardSells[x, y].Figure is Rook && !boardSells[x, y].Figure.Moved)
 						{
-							list.Add(boardSells[CurrentSell.X += direction * 2, CurrentSell.Y]);
+							list.Add(boardSells[CurrentCell.X += direction * 2, CurrentCell.Y]);
 							break;
 						}
 						else if (boardSells[x, y].Figure != null)

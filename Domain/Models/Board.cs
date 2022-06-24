@@ -10,14 +10,14 @@ namespace Domain.Models
     public class Board
     {
         public const int SIZE = 8;
-        public Sell[,] Sells { get; set; }
+        public Cell[,] Cells { get; set; }
         public Board()
         {
-            Sells = GetEmptyBoard();
+            Cells = GetEmptyBoard();
         }
-        public Board(Sell[,] sells)
+        public Board(Cell[,] sells)
         {
-            Sells = sells;
+            Cells = sells;
         }
 
         public Figure GetFigure(int x, int y)
@@ -25,12 +25,12 @@ namespace Domain.Models
             if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
                 throw new ArgumentException("Out of board bounds");
 
-            return Sells[x, y].Figure;
+            return Cells[x, y].Figure;
         }
 
-        public IEnumerable<Tuple<Figure, Sell>> GetFigures()
+        public IEnumerable<Tuple<Figure, Cell>> GetFigures()
         {
-            return GetFigures(f => true).Select(f => new Tuple<Figure, Sell>(f, f.CurrentSell));
+            return GetFigures(f => true).Select(f => new Tuple<Figure, Cell>(f, f.CurrentCell));
         }
             
 
@@ -40,27 +40,27 @@ namespace Domain.Models
             {
                 for(var y = 0; y < SIZE; y++)
                 {
-                    if(Sells[x, y].Figure != null && predicate(Sells[x, y].Figure))
+                    if(Cells[x, y].Figure != null && predicate(Cells[x, y].Figure))
                     {
-                        yield return Sells[x, y].Figure;
+                        yield return Cells[x, y].Figure;
                     }
                 }
             }
         }
 
-        public static Sell[,] GetEmptyBoard()
+        public static Cell[,] GetEmptyBoard()
         {
-            Sell[,] sells = new Sell[SIZE, SIZE];
+            Cell[,] cells = new Cell[SIZE, SIZE];
 
             for (int i = 0; i < SIZE; i++)
             {
                 for (int j = 0; j < SIZE; j++)
                 {
-                    sells[i, j] = new Sell() { X = i, Y = j };
+                    cells[i, j] = new Cell() { X = i, Y = j };
                 }
             }
 
-            return sells;
+            return cells;
         }
     }
 }

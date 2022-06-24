@@ -4,9 +4,9 @@ namespace Domain
 {
     public interface IBoardPainter
     {
-        void DrawAvaibleSells(List<Sell> avaibleSells);
+        void DrawAvaibleSells(List<Cell> avaibleSells);
         void ResetAvaibleSells();
-        void DrawBoard(Sell[,] sells);
-        void ChooseFigure(Sell figureSell);
+        void DrawBoard(Cell[,] sells);
+        void ChooseFigure(Cell figureSell);
     }
 }

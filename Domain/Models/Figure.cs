@@ -8,17 +8,17 @@ namespace Domain.Models
         public readonly string Image;
 
         public bool Moved { get; private set; } = false;
-        public Sell CurrentSell { get; protected set; }
+        public Cell CurrentCell { get; protected set; }
 
-        public Figure(string image, Sell sell, FigureColor color = FigureColor.Black)
+        public Figure(string image, Cell sell, FigureColor color = FigureColor.Black)
         {
             Color = color;
             Image = image;
-            CurrentSell = sell;
-            CurrentSell.Figure = this;
+            CurrentCell = sell;
+            CurrentCell.Figure = this;
         }
 
-        public virtual void Move(Sell newSell)
+        public virtual void Move(Cell newSell)
         {
             if (newSell == null) throw new ArgumentNullException("newsell is null");
 
@@ -30,23 +30,23 @@ namespace Domain.Models
             Moved = true;
         }
 
-        public virtual void ChangeSell(Sell newSell)
+        public virtual void ChangeSell(Cell newSell)
         {
             if (newSell == null) throw new ArgumentNullException("newsell is null");
 
-            CurrentSell.Figure = null;
+            CurrentCell.Figure = null;
             newSell.Figure = this;
 
-            CurrentSell = newSell;
+            CurrentCell = newSell;
         }
 
-        public abstract List<Sell> GetAvaibleSells(Sell[,] boardSells);
+        public abstract List<Cell> GetAvaibleCells(Cell[,] boardCells);
 
-        protected bool CanMoveTo(int x, int y, Sell[,] boardSells)
+        protected bool CanMoveTo(int x, int y, Cell[,] boardCells)
         {
             try
             {
-                if (boardSells[x, y].Figure?.Color == Color) return false;
+                if (boardCells[x, y].Figure?.Color == Color) return false;
             }
             catch
             {

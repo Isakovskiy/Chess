@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Sell
+    public class Cell
     {
         public Figure Figure { get; set; }
         public string Image { get; set; }
