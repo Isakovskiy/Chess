@@ -1,5 +1,6 @@
 ﻿using Domain.Models.Figures;
 
+
 namespace Domain.Models
 {
     public class Chess
@@ -11,6 +12,12 @@ namespace Domain.Models
             var cells = Board.GetEmptyBoard();
 
             //Создаем фигуры
+            var l1 = new Rook(cells[0, 0], figuresPainter, FigureColor.White);
+            var l2 = new Rook(cells[7, 0], figuresPainter, FigureColor.White);
+            var k = new King(cells[4, 0], FiguresPainter, FigureColor.White);
+
+            k.SmallCastling += (x, y) => l1.Move(cells[x, y]);
+            k.BigCastling += (x, y) => l2.Move(cells[x, y]);
 
             _board = new Board(cells);
             BoardPainter.DrawBoard(_board.Cells);

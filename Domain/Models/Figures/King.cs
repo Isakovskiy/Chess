@@ -8,7 +8,7 @@ namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
+		public King(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
 		{ }
 
 		public event Action<int, int> BigCastling;
