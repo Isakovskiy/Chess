@@ -25,9 +25,9 @@ namespace Domain.Models
 
             if (newSell == null) throw new ArgumentNullException("newsell is null");
 
+            CurrentSell.Figure = null;
             newSell.Figure = this;
             
-            CurrentSell.Figure = null;
             CurrentSell = newSell;
 
             Moved = true;
