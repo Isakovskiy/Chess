@@ -8,10 +8,11 @@ namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
+		public King(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
 		{ }
 
-
+		public event Action<int, int> BigCastling;
+		public event Action<int, int> SmallCastling;
 		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
 		{
 			var list = new List<Cell>();
@@ -38,9 +39,9 @@ namespace Domain.Models.Figures
 				}
 			}
 
+			//castling
 			if (!Moved)
 			{
-				//roque
 				for (int direction = -1; direction <= 1; direction += 2)
                 {
 					int x = CurrentCell.X + direction;
@@ -63,6 +64,32 @@ namespace Domain.Models.Figures
 			}
 
 			return list;
+		}
+
+		public override void Move(Cell newSell)
+		{
+			Cell oldCell = CurrentCell;
+			base.Move(newSell);
+			int direction = CurrentCell.X - oldCell.X; // -2 -> влево  2 -> вправо
+			if (Math.Abs(direction) == 2)
+			{
+				if (direction == -2)
+				{
+					if (Color == FigureColor.White)
+						BigCastling(3, 0);
+					else
+						SmallCastling(2, 7);
+				}
+				else if (direction == 2)
+				{
+					if (Color == FigureColor.White)
+						SmallCastling(5, 0);
+					else
+						BigCastling(4, 7);
+				}
+				else
+					throw new Exception("Error with castling, obratites' k programmistu");
+			}
 		}
 	}
 }
