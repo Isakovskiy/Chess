@@ -28,6 +28,12 @@ namespace Domain.Models
             return Sells[x, y].Figure;
         }
 
+        public IEnumerable<Tuple<Figure, Sell>> GetFigures()
+        {
+            return GetFigures(f => true).Select(f => new Tuple<Figure, Sell>(f, f.CurrentSell));
+        }
+            
+
         public IEnumerable<Figure> GetFigures(Func<Figure, bool> predicate)
         {
             for(int x = 0; x < SIZE; x++)

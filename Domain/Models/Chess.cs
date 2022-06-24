@@ -87,28 +87,23 @@ namespace Domain.Models
             var enemyFigures = _board.GetFigures(f => f.Color == enemyColor).ToList();
             var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
 
+            var realBoard = new List<Tuple<Figure, Sell>>();
+            realBoard.AddRange(_board.GetFigures()); // сохраняем все начальные позиции
+
             for (int i = 0; i < enemyFigures.Count; i++)
             {
-                var startPos = enemyFigures[i].CurrentSell;
-                var eatedFigures = new List<Tuple<Figure, Sell>>();
-
                 foreach(var avaibleSell in enemyFigures[i].GetAvaibleSells(_board.Sells))
                 {
-                    if (avaibleSell.Figure != null) eatedFigures.Add(new Tuple<Figure, Sell>(avaibleSell.Figure, avaibleSell));
                     enemyFigures[i].Move(avaibleSell);
 
                     if (ourFigures.IsEveryone(f => !Check(f)))
                     {
-                        eatedFigures.ReturnEatedFigures();
-                        enemyFigures[i].Move(startPos);
-
+                        realBoard.ReturnFigures();
                         return GameResult.Going;
                     }
 
-                    eatedFigures.ReturnEatedFigures();
+                    realBoard.ReturnFigures();
                 }
-
-                enemyFigures[i].Move(startPos);
             }
 
             return enemyColor == FigureColor.Black ? GameResult.WhiteWon : GameResult.BlackWon;
@@ -133,13 +128,12 @@ namespace Domain.Models
             return true;
         }
 
-        public static void ReturnEatedFigures(this List<Tuple<Figure, Sell>> eatedFigures)
+        public static void ReturnFigures(this List<Tuple<Figure, Sell>> figures)
         {
-            foreach (var f in eatedFigures)
+            foreach (var f in figures)
             {
-                f.Item1.Move(f.Item2);
+                f.Item1.ChangeSell(f.Item2);
             }
-            eatedFigures = null;
         }
 
         public static List<Sell> RemoveBannedMoves(this List<Sell> sells, Figure figure, Board board)
@@ -149,16 +143,13 @@ namespace Domain.Models
                 throw new ArgumentNullException();
             }
 
-            var startSell = figure.CurrentSell;
-            List<Tuple<Figure, Sell>>? eatedFigures = null;
+            var realBoard = new List<Tuple<Figure, Sell>>();
+            realBoard.AddRange(board.GetFigures()); // сохраняем все начальные позиции
 
             try
             {
                 for (int i = 0; i < sells.Count; i++)
                 {
-                    eatedFigures = new List<Tuple<Figure, Sell>>();
-                    if (sells[i].Figure != null) eatedFigures.Add(new Tuple<Figure, Sell>(sells[i].Figure, sells[i]));
-
                     figure.Move(sells[i]);
                     var enemyFigures = board.GetFigures(predicate: f => f.Color != figure.Color).ToList();
 
@@ -173,14 +164,12 @@ namespace Domain.Models
                         }
                     }
 
-                    figure.Move(startSell);
-                    eatedFigures.ReturnEatedFigures();
+                    realBoard.ReturnFigures();
                 }
             }
             finally
             {
-                figure.Move(startSell);
-                eatedFigures?.ReturnEatedFigures();
+                realBoard.ReturnFigures();
             }
             return sells;
         }

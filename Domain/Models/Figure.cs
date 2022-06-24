@@ -20,17 +20,24 @@ namespace Domain.Models
 
         public virtual void Move(Sell newSell)
         {
+            if (newSell == null) throw new ArgumentNullException("newsell is null");
+
             //Sell.Image = null;
             //Sell.Image = Images[FigureType];
 
+            ChangeSell(newSell);
+
+            Moved = true;
+        }
+
+        public virtual void ChangeSell(Sell newSell)
+        {
             if (newSell == null) throw new ArgumentNullException("newsell is null");
 
             CurrentSell.Figure = null;
             newSell.Figure = this;
-            
-            CurrentSell = newSell;
 
-            Moved = true;
+            CurrentSell = newSell;
         }
 
         public abstract List<Sell> GetAvaibleSells(Sell[,] boardSells);
