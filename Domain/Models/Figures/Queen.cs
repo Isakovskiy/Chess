@@ -15,24 +15,7 @@ namespace Domain.Models.Figures
         public override List<Sell> GetAvaibleSells(Sell[,] boardSells)
         {
             var list = new List<Sell>();
-			//list.AddRange(new Rook(CurrentSell).GetAvaibleSells(boardSells));
-			//list.AddRange(new Bishop(CurrentSell).GetAvaibleSells(boardSells));
 
-			for (int i = -1; i <= 1; i += 2)
-			{
-				for (int j = -1; j <= 1; j += 2)
-				{
-					var x = CurrentSell.X + i;
-					var y = CurrentSell.Y + j;
-					while (CanMoveTo(x, y, boardSells))
-					{
-						list.Add(boardSells[x, y]);
-						if (boardSells[x, y].Figure != null) break;
-						x += i;
-						y += j;
-					}
-				}
-			}
 			for (int i = -1; i <= 1; i += 2)
 			{
 				int x = CurrentSell.X + i;
@@ -43,17 +26,27 @@ namespace Domain.Models.Figures
 					if (boardSells[x, y].Figure != null) break;
 					x += i;
 				}
-			}
 
-			for (int i = -1; i <= 1; i += 2)
-			{
-				int x = CurrentSell.X;
-				int y = CurrentSell.Y + i;
+				x = CurrentSell.X;
+				y = CurrentSell.Y + i;
 				while (CanMoveTo(x, y, boardSells))
 				{
 					list.Add(boardSells[x, y]);
 					if (boardSells[x, y].Figure != null) break;
 					y += i;
+				}
+
+				for (int j = -1; j <= 1; j += 2)
+				{
+					x = CurrentSell.X + i;
+					y = CurrentSell.Y + j;
+					while (CanMoveTo(x, y, boardSells))
+					{
+						list.Add(boardSells[x, y]);
+						if (boardSells[x, y].Figure != null) break;
+						x += i;
+						y += j;
+					}
 				}
 			}
 			return list;
