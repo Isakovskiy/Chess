@@ -46,7 +46,7 @@ namespace Domain.Models
                 Painter.DrawAvaibleSells(avaibleSells);
             }
         }
-
+        
         public GameResult Move(Sell toSell)
         {
             if(toSell == null)
@@ -61,16 +61,28 @@ namespace Domain.Models
                 Painter.ResetAvaibleSells();
                 Painter.DrawBoard(_board.Sells);
 
-                if (Check(avaibleSells)) return CheckForCheckMate(_choosedFigure.Color);
+                if (Check(_choosedFigure.Color.Reverese())) return CheckMate(_choosedFigure.Color.Reverese());
+                GoingPlayer = GoingPlayer.Reverese();
             }
 
             return GameResult.Going;
         }
 
-        private bool Check(List<Sell> sells) // шах
-            => sells.FirstOrDefault(s => s.Figure is King) != null;
+        private bool Check(FigureColor enemyColor) // шах
+        {
+            var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
+            var allSells = new List<Sell>();
 
-        private GameResult CheckForCheckMate(FigureColor enemyColor) // шах и мат
+            foreach(var f in ourFigures)
+            {
+                allSells.AddRange(f.GetAvaibleSells(_board.Sells));
+            }
+            return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
+        }
+        private bool Check(Figure figure) // шах
+            => figure.GetAvaibleSells(_board.Sells).FirstOrDefault(s => s.Figure is King) != null;
+
+        private GameResult CheckMate(FigureColor enemyColor) // шах и мат
         {
             var enemyFigures = _board.GetFigures(f => f.Color == enemyColor).ToList();
             var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
@@ -85,7 +97,7 @@ namespace Domain.Models
                     if (avaibleSell.Figure != null) eatedFigures.Add(new Tuple<Figure, Sell>(avaibleSell.Figure, avaibleSell));
                     enemyFigures[i].Move(avaibleSell);
 
-                    if (ourFigures.IsEveryone(f => !Check(f.GetAvaibleSells(_board.Sells))))
+                    if (ourFigures.IsEveryone(f => !Check(f)))
                     {
                         eatedFigures.ReturnEatedFigures();
                         enemyFigures[i].Move(startPos);
@@ -107,6 +119,10 @@ namespace Domain.Models
 
     static class Hepler
     {
+        public static FigureColor Reverese(this FigureColor figureColor)
+        {
+            return figureColor == FigureColor.White ? FigureColor.Black : FigureColor.White;
+        }
         public static bool IsEveryone<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
         {
             foreach(var item in collection)
