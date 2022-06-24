@@ -11,13 +11,42 @@ namespace Domain.Models
             FiguresPainter = figuresPainter;
             var cells = Board.GetEmptyBoard();
 
-            //Создаем фигуры
-            var l1 = new Rook(cells[0, 0], figuresPainter, FigureColor.White);
-            var l2 = new Rook(cells[7, 0], figuresPainter, FigureColor.White);
-            var k = new King(cells[4, 0], FiguresPainter, FigureColor.White);
+            FigureColor color = FigureColor.White;
+            for (int k = 1; k <= 6; k += 5)
+            {
+                for (int i = 0; i < Board.SIZE; i++)
+                {
+                    new Pawn(cells[i, k], figuresPainter, color);
+                }
+                color = color.Reverese();
+            }
 
-            k.SmallCastling += (x, y) => l2.Move(cells[x, y]);
-            k.BigCastling += (x, y) => l1.Move(cells[x, y]);
+            var lw = new Rook(cells[0, 0], FiguresPainter, FigureColor.White);
+            var rw = new Rook(cells[7, 0], FiguresPainter, FigureColor.White);
+            var lb = new Rook(cells[0, 7], FiguresPainter, FigureColor.Black);
+            var rb = new Rook(cells[7, 7], FiguresPainter, FigureColor.Black);
+
+            new Knight(cells[1, 0], FiguresPainter, FigureColor.White);
+            new Knight(cells[6, 0], FiguresPainter, FigureColor.White);
+            new Knight(cells[1, 7], FiguresPainter, FigureColor.Black);
+            new Knight(cells[6, 7], FiguresPainter, FigureColor.Black);
+
+            new Bishop(cells[2, 0], FiguresPainter, FigureColor.White);
+            new Bishop(cells[5, 0], FiguresPainter, FigureColor.White);
+            new Bishop(cells[2, 7], FiguresPainter, FigureColor.Black);
+            new Bishop(cells[5, 7], FiguresPainter, FigureColor.Black);
+
+            new Queen(cells[3, 0], FiguresPainter, FigureColor.White);
+            var kw = new King(cells[4, 0], FiguresPainter, FigureColor.White);
+            new Queen(cells[4, 7], FiguresPainter, FigureColor.Black);
+            var kb = new King(cells[3, 7], FiguresPainter, FigureColor.Black);
+
+
+            kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
+            kw.BigCastling += (x, y) => lw.Move(cells[x, y]);
+            kb.SmallCastling += (x, y) => lb.Move(cells[x, y]);
+            kb.BigCastling += (x, y) => rb.Move(cells[x, y]);
+
 
             _board = new Board(cells);
             BoardPainter.DrawBoard(_board.Cells);
