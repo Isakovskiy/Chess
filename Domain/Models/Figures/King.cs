@@ -53,7 +53,7 @@ namespace Domain.Models.Figures
 							break;
 						if (boardSells[x, y].Figure is Rook && !boardSells[x, y].Figure.Moved)
 						{
-							list.Add(boardSells[CurrentCell.X += direction * 2, CurrentCell.Y]);
+							list.Add(boardSells[CurrentCell.X + direction * 2, CurrentCell.Y]);
 							break;
 						}
 						else if (boardSells[x, y].Figure != null)

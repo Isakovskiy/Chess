@@ -16,8 +16,8 @@ namespace Domain.Models
             var l2 = new Rook(cells[7, 0], figuresPainter, FigureColor.White);
             var k = new King(cells[4, 0], FiguresPainter, FigureColor.White);
 
-            k.SmallCastling += (x, y) => l1.Move(cells[x, y]);
-            k.BigCastling += (x, y) => l2.Move(cells[x, y]);
+            k.SmallCastling += (x, y) => l2.Move(cells[x, y]);
+            k.BigCastling += (x, y) => l1.Move(cells[x, y]);
 
             _board = new Board(cells);
             BoardPainter.DrawBoard(_board.Cells);
@@ -42,24 +42,24 @@ namespace Domain.Models
             {
                 return;
             }
-            
+
             BoardPainter.ResetAvaibleCells();
             _choosedFigure = null;
 
             if (figure != null && figure.Color == GoingPlayer)
             {
                 _choosedFigure = figure;
-                
+
                 var avaibleSells = _choosedFigure.GetAvaibleCells(_board.Cells).RemoveBannedMoves(_choosedFigure, _board);
 
                 FiguresPainter.ChooseFigure(_choosedFigure.CurrentCell);
                 BoardPainter.DrawAvaibleCells(avaibleSells);
             }
         }
-        
+
         public GameResult Move(Cell toCell)
         {
-            if(toCell == null)
+            if (toCell == null)
             {
                 throw new ArgumentNullException();
             }
@@ -72,7 +72,7 @@ namespace Domain.Models
                 BoardPainter.ResetAvaibleCells();
                 BoardPainter.DrawBoard(_board.Cells);
 
-                if (Draw)
+                if (Draw())
                 {
                     return GameResult.Draw;
                 }
@@ -80,7 +80,7 @@ namespace Domain.Models
                 {
                     return CheckMate(_choosedFigure.Color.Reverese());
                 }
-                
+
             }
 
             return GameResult.Going;
@@ -91,7 +91,7 @@ namespace Domain.Models
             var ourFigures = _board.GetFigures(f => f.Color != enemyColor).ToList();
             var allSells = new List<Cell>();
 
-            foreach(var f in ourFigures)
+            foreach (var f in ourFigures)
             {
                 allSells.AddRange(f.GetAvaibleCells(_board.Cells));
             }
@@ -101,9 +101,12 @@ namespace Domain.Models
              figure.GetAvaibleCells(_board.Cells).FirstOrDefault(s => s.Figure is King) != null;
 
 
-        private bool Draw =>
-            !Check(GoingPlayer) && 
-            _board.GetFigures(f => f.Color == GoingPlayer).Select(f => f.GetAvaibleCells(_board.Cells)).Count() == 0;
+        private bool Draw()
+        {
+            //black
+            return !Check(GoingPlayer) && !Check(GoingPlayer.Reverese()) && 
+            _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
+        }
 
 
         private GameResult CheckMate(FigureColor enemyColor) // шах и мат
