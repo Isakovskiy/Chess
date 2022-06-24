@@ -7,10 +7,10 @@ namespace Domain
     {
         /// <summary>
         /// Не бейте, мы пытались придумать что-то нормальное, но получилось это...
-        /// 
         /// </summary>
         /// <returns>Тип фигуры, на которую нажали</returns>
         TransformFigures DrawFigureReplaceSelectionAndGet();
         void ChooseFigure(Cell figureCell);
+        void MoveFigure(Cell from, Cell to);
     }
 }

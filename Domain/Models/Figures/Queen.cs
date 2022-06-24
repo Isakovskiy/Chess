@@ -8,7 +8,7 @@ namespace Domain.Models.Figures
 {
     public class Queen : Figure
     {
-        public Queen(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
+        public Queen(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
 		{
         }
 		
