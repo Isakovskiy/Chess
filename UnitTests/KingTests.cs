@@ -21,19 +21,19 @@ namespace UnitTests
 		public void GetAvaibleSellsTest()
 		{
 			var board = Board.GetEmptyBoard();
-			var k = new King("fake", board[4, 0], FigureColor.White);
+			var k = new King("fake", board[4, 0], new FakeFiguresDrawer(), FigureColor.White);
 
 			var list = k.GetAvaibleCells(board);
 			Assert.IsTrue(list.Count == 5);
 
-			var q1 = new Queen("fake", board[3, 0]);
-			var q2 = new Queen("fake", board[5, 0], FigureColor.White);
+			var q1 = new Queen("fake", board[3, 0], new FakeFiguresDrawer());
+			var q2 = new Queen("fake", board[5, 0], new FakeFiguresDrawer(), FigureColor.White);
 
 			list = k.GetAvaibleCells(board);
 			Assert.IsTrue(list.Count == 4);
 
-			var r = new Rook("fake", board[0, 0], FigureColor.White);
-			r = new Rook("fake", board[7, 0], FigureColor.White);
+			var r = new Rook("fake", board[0, 0], new FakeFiguresDrawer(), FigureColor.White);
+			r = new Rook("fake", board[7, 0], new FakeFiguresDrawer(), FigureColor.White);
 			q1.Move(board[7, 7]);
 
 			list = k.GetAvaibleCells(board);

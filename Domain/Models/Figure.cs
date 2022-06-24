@@ -9,13 +9,15 @@ namespace Domain.Models
 
         public bool Moved { get; private set; } = false;
         public Cell CurrentCell { get; protected set; }
+        public IFiguresPainter FiguresPainter { get; set; }
 
-        public Figure(string image, Cell sell, FigureColor color = FigureColor.Black)
+        public Figure(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black)
         {
             Color = color;
             Image = image;
             CurrentCell = sell;
             CurrentCell.Figure = this;
+            FiguresPainter = figuresPainter;
         }
 
         public virtual void Move(Cell newSell)
@@ -25,19 +27,19 @@ namespace Domain.Models
             //Sell.Image = null;
             //Sell.Image = Images[FigureType];
 
-            ChangeSell(newSell);
+            ChangeCell(newSell);
 
             Moved = true;
         }
 
-        public virtual void ChangeSell(Cell newSell)
+        public virtual void ChangeCell(Cell newCell)
         {
-            if (newSell == null) throw new ArgumentNullException("newsell is null");
+            if (newCell == null) throw new ArgumentNullException("newsell is null");
 
             CurrentCell.Figure = null;
-            newSell.Figure = this;
+            newCell.Figure = this;
 
-            CurrentCell = newSell;
+            CurrentCell = newCell;
         }
 
         public abstract List<Cell> GetAvaibleCells(Cell[,] boardCells);

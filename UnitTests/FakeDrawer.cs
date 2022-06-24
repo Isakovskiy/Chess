@@ -5,30 +5,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Models.Figures;
 
 namespace UnitTests
 {
 	class FakeDrawer : IBoardPainter
 	{
 		public List<Cell> AvaibleSells { get; set; }
-		public Cell[,] Sells { get; set; }
-		public Figure ChoosedFigure { get; set; }
+		public Cell[,] Cells { get; set; }
 
-		public void DrawBoard(Cell[,] sells)
+		public void DrawBoard(Cell[,] cells)
 		{
-			Sells = sells;
+			this.Cells = cells;
 		}
-		public void ResetAvaibleSells()
+		public void ResetAvaibleCells()
 		{
 			AvaibleSells = null;
 		}
-		public void DrawAvaibleSells(List<Cell> avaibleSells)
+		public void DrawAvaibleCells(List<Cell> avaibleSells)
 		{
 			AvaibleSells = avaibleSells;
 		}
-		public void ChooseFigure(Cell figureSell)
-		{
-			ChoosedFigure = figureSell.Figure;
-		}
 	}
+
+    class FakeFiguresDrawer : IFiguresPainter
+    {
+		public Figure ChoosedFigure { get; set; }
+		public void ChooseFigure(Cell figureSell)
+        {
+			ChoosedFigure = figureSell.Figure;
+
+		}
+        public Figure DrawFigureReplaceSelection(Cell figureCell)
+        {
+			return new Queen(image: "fake", figureCell, new FakeFiguresDrawer(), figureCell.Figure.Color);
+        }
+
+        public TransformFigures GetChoice()
+        {
+			return TransformFigures.Queen;
+        }
+
+        void IFiguresPainter.DrawFigureReplaceSelection(Cell figureCell)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

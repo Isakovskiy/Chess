@@ -18,13 +18,13 @@ namespace UnitTests
 		public void CheckTest()
 		{
 			var painter = new FakeDrawer();
-			Chess chess = new Chess(painter);
-			var board = painter.Sells;
-			var kingW = new King("fake", board[4, 0], FigureColor.White);
-			var pawnW = new Pawn("fake", board[4, 1], FigureColor.White);
-			var pawnW2 = new Pawn("fake", board[0, 1], FigureColor.White);
-			var rookB = new Rook("fake", board[4, 7]);
-			var queenB = new Queen("fake", board[4, 3]);
+			Chess chess = new Chess(painter, new FakeFiguresDrawer());
+			var board = painter.Cells;
+			var kingW = new King("fake", board[4, 0], new FakeFiguresDrawer(), FigureColor.White);
+			var pawnW = new Pawn("fake", board[4, 1], new FakeFiguresDrawer(), FigureColor.White);
+			var pawnW2 = new Pawn("fake", board[0, 1], new FakeFiguresDrawer(), FigureColor.White);
+			var rookB = new Rook("fake", board[4, 7], new FakeFiguresDrawer());
+			var queenB = new Queen("fake", board[4, 3], new FakeFiguresDrawer());
 
 
 			chess.ChooseFigure(0, 1);

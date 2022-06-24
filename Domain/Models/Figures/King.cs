@@ -8,9 +8,11 @@ namespace Domain.Models.Figures
 {
 	public class King : Figure
 	{
-		public King(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color) { }
+		public King(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
+		{ }
 
-        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
+
+		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
 		{
 			var list = new List<Cell>();
 			Tuple<int, int>[] tuple = new Tuple<int, int>[8]

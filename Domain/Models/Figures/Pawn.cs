@@ -8,7 +8,7 @@ namespace Domain.Models.Figures
 {
     public class Pawn : Figure
     {
-        public Pawn(string image, Cell sell, FigureColor color = FigureColor.Black) : base(image, sell, color)
+        public Pawn(string image, Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(image, sell, figuresPainter, color)
         {
         }
         public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
@@ -37,6 +37,24 @@ namespace Domain.Models.Figures
             }
 
             return list;
+        }
+
+        public override void Move(Cell newCell)
+        {
+            base.Move(newCell);
+
+            if(newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
+            {
+                var newFigureType = FiguresPainter.DrawFigureReplaceSelectionAndGet();
+                switch (newFigureType)
+                {
+                    case TransformFigures.Rook:
+                        break;
+                    case TransformFigures.Queen:
+                        break;
+
+                }
+            }
         }
 
     }
