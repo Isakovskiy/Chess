@@ -38,8 +38,8 @@ namespace Domain.Models
 
             new Queen(cells[3, 0], FiguresPainter, FigureColor.White);
             var kw = new King(cells[4, 0], FiguresPainter, FigureColor.White);
-            new Queen(cells[4, 7], FiguresPainter, FigureColor.Black);
-            var kb = new King(cells[3, 7], FiguresPainter, FigureColor.Black);
+            new Queen(cells[3, 7], FiguresPainter, FigureColor.Black);
+            var kb = new King(cells[4, 7], FiguresPainter, FigureColor.Black);
 
 
             kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
@@ -114,8 +114,8 @@ namespace Domain.Models
             if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toCell))
             {
                 _choosedFigure.Move(toCell);
-                var figure = _choosedFigure;
                 _choosedFigure = null;
+                
                 GoingPlayer = GoingPlayer.Reverese();
 
                 BoardPainter.ResetAvaibleCells();
@@ -125,9 +125,9 @@ namespace Domain.Models
                 {
                     return GameResult.Draw;
                 }
-                else if (Check(figure.Color.Reverese()))
+                else if (Check(GoingPlayer))
                 {
-                    return CheckMate(figure.Color.Reverese());
+                    return CheckMate(GoingPlayer);
                 }
 
             }
@@ -172,7 +172,7 @@ namespace Domain.Models
                 {
                     enemyFigures[i].ChangeCell(avaibleCell);
 
-                    if (ourFigures.All(f => !Check(f)))
+                    if (!Check(enemyColor))
                     {
                         realBoard.ReturnFigures();
                         return GameResult.Going;

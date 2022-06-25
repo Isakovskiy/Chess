@@ -24,7 +24,7 @@ namespace Domain.Models.Figures
             {
                 list.Add(boardSells[x, y + dir]);
 
-                if(!Moved && CanMoveTo(x, y + dir * 2, boardSells))
+                if(!Moved && CanMoveTo(x, y + dir * 2, boardSells) && boardSells[x, y + dir * 2].Figure == null)
                 {
                     list.Add(boardSells[x, y + dir * 2]);
                 }

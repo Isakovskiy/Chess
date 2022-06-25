@@ -35,7 +35,7 @@ namespace Domain.Models
         {
             if (newCell == null) throw new ArgumentNullException("newsell is null");
 
-            CurrentCell.Figure = null;
+            if(CurrentCell.Figure == this) CurrentCell.Figure = null;
             newCell.Figure = this;
 
             CurrentCell = newCell;

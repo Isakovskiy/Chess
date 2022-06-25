@@ -79,7 +79,7 @@ namespace WinFormsApp
                 {
                     if (sells[i, j].Figure != null) 
                     {
-                        _cellsView[i, j].Image = new Bitmap(Image.FromFile($@"C:\Users\visua\source\repos\Chess2\WinFormsApp\Figures\{sells[i, j].Figure.Name}{sells[i, j].Figure.Color.ToString()[0]}.png"), new Size(75, 75));
+                        _cellsView[i, j].Image = new Bitmap(Image.FromFile($@"..\..\..\Figures\{sells[i, j].Figure.Name}{sells[i, j].Figure.Color.ToString()[0]}.png"), new Size(75, 75));
                     }
                     else
                     {
