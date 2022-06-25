@@ -72,10 +72,7 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Style="{StaticResource MyButtonStyle}">
-                        <Button.Background>
-                            <ImageBrush/>
-                        </Button.Background>
+                    <Button Style="{StaticResource MyButtonStyle}" Background="{Binding bg}" Click="CellClick" Tag="{Binding Id}">
                         <Image Source="{Binding Path}">
                         </Image>
                     </Button>

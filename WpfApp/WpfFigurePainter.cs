@@ -2,21 +2,33 @@
 using Domain;
 using Domain.Models.Figures;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace WpfApp
 {
     class WpfFigurePainter : IFiguresPainter
     {
-        List<int> figures = new List<int>();
-
+        ObservableCollection<CellViem> _cells;
+        public WpfFigurePainter(ObservableCollection<CellViem> cells)
+        {
+            _cells = cells;
+        }
         public void ChooseFigure(Cell figureCell)
         {
-            throw new System.NotImplementedException();
+            foreach(var cell in _cells)
+            {
+                if (cell.X == figureCell.X && cell.Y == figureCell.Y)
+                {
+                    cell.ChangeBg(Brushes.Brown);
+                    return;
+                }
+            }
         }
 
         public TransformFigures DrawFigureReplaceSelectionAndGet()
         {
-            throw new System.NotImplementedException();
+            return TransformFigures.Queen;
         }
 
         public void MoveFigure(Cell from, Cell to)
@@ -25,7 +37,7 @@ namespace WpfApp
 
             //anim(f, to.X, to.Y);
 
-            throw new System.NotImplementedException();
+            
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Domain
         /// <returns>Тип фигуры, на которую нажали</returns>
         TransformFigures DrawFigureReplaceSelectionAndGet();
         void ChooseFigure(Cell figureCell);
+        void CancelFigure(Figure figure);
         void MoveFigure(Cell from, Cell to);
     }
 }

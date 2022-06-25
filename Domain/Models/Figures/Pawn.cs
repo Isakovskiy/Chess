@@ -20,7 +20,7 @@ namespace Domain.Models.Figures
             var x = CurrentCell.X;
             var y = CurrentCell.Y;
 
-            if (CanMoveTo(x, y + dir, boardSells))
+            if (CanMoveTo(x, y + dir, boardSells) && boardSells[x, y + dir].Figure == null)
             {
                 list.Add(boardSells[x, y + dir]);
 

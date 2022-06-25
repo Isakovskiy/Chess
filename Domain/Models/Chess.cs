@@ -55,6 +55,8 @@ namespace Domain.Models
         private Board _board;
         private Figure? _choosedFigure = null;
 
+        public IEnumerable<Cell> AvaibledCells => _choosedFigure?.GetAvaibleCells(_board.Cells)?.RemoveBannedMoves(_choosedFigure, _board);
+
         public FigureColor GoingPlayer { get; set; } = FigureColor.White;
         public IBoardPainter BoardPainter { get; set; }
         public IFiguresPainter FiguresPainter { get; set; }
@@ -73,7 +75,12 @@ namespace Domain.Models
             }
 
             BoardPainter.ResetAvaibleCells();
-            _choosedFigure = null;
+
+            if(_choosedFigure != null)
+            {
+                FiguresPainter.CancelFigure(_choosedFigure);
+                _choosedFigure = null;
+            }
 
             if (figure != null && figure.Color == GoingPlayer)
             {
@@ -86,16 +93,29 @@ namespace Domain.Models
             }
         }
 
-        public GameResult Move(Cell toCell)
+        public GameResult Move(int x, int y)
         {
+            Cell toCell;
+            try
+            {
+                toCell = _board.Cells[x, y];
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
             if (toCell == null)
             {
                 throw new ArgumentNullException();
             }
             List<Cell>? avaibleSells = _choosedFigure?.GetAvaibleCells(_board.Cells);
+
             if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toCell))
             {
                 _choosedFigure.Move(toCell);
+                var figure = _choosedFigure;
+                _choosedFigure = null;
                 GoingPlayer = GoingPlayer.Reverese();
 
                 BoardPainter.ResetAvaibleCells();
@@ -105,9 +125,9 @@ namespace Domain.Models
                 {
                     return GameResult.Draw;
                 }
-                else if (Check(_choosedFigure.Color.Reverese()))
+                else if (Check(figure.Color.Reverese()))
                 {
-                    return CheckMate(_choosedFigure.Color.Reverese());
+                    return CheckMate(figure.Color.Reverese());
                 }
 
             }
@@ -122,7 +142,7 @@ namespace Domain.Models
 
             foreach (var f in ourFigures)
             {
-                allSells.AddRange(f.GetAvaibleCells(_board.Cells));
+                allSells.AddRange(f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board));
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
@@ -134,7 +154,7 @@ namespace Domain.Models
         {
             //black
             return !Check(GoingPlayer) && !Check(GoingPlayer.Reverese()) && 
-            _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
+             _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
         }
 
 

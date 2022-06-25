@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Domain;
 using Domain.Models;
 
@@ -12,7 +13,6 @@ namespace WpfApp
     class WpfBoardPainter : IBoardPainter
     {
         ObservableCollection<CellViem> _cells;
-
         public WpfBoardPainter(ObservableCollection<CellViem> cells)
         {
             _cells = cells;
@@ -20,27 +20,38 @@ namespace WpfApp
 
         public void DrawAvaibleCells(List<Cell> avaibleCells)
         {
-            throw new NotImplementedException();
+            foreach(var cell in avaibleCells)
+            {
+                var viewCell = _cells.FirstOrDefault(c => c.X == cell.X && c.Y == cell.Y);
+                if(viewCell != null)
+                {
+                    viewCell.ChangeBg(Brushes.White);
+                    viewCell.AvaibleForMove = true;
+                }
+            }
         }
 
         public void DrawBoard(Cell[,] sells)
         {
-            for(int i = 0; i < sells.GetLength(0); i++)
+
+            for (int i = 0; i < sells.GetLength(0); i++)
             {
-                for(int j = 0; j < sells.GetLength(1); j++)
+                for (int j = 0; j < sells.GetLength(1); j++)
                 {
                     var cell = _cells.FirstOrDefault(c => c.X == i && c.Y == j);
-                    if (sells[i, j].Figure?.Name != cell?.FigureName && sells[i, j].Figure?.Color != cell?.FigureColor)
-                    {
-                        cell?.ChangeImage(sells[i, j].Figure?.Name + ((sells[i, j].Figure.Color == FigureColor.Black) ? "B" : "W"));
-                    }
+                    cell.ChangeImage(sells[i, j].Figure?.Name + sells[i, j].Figure?.Color.ToString()[0]);
                 }
             }
         }
 
         public void ResetAvaibleCells()
         {
-            throw new NotImplementedException();
+
+            for(int i = 0; i < _cells.Count; i++)
+            {
+                _cells[i].ChangeBg(Brushes.Brown);
+                _cells[i].AvaibleForMove = false;
+            }
         }
     }
 }
