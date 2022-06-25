@@ -11,6 +11,8 @@ namespace Domain.Models.Figures
 		public King(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
 		{ }
 
+		public override string Name => "King";
+
 		public event Action<int, int> BigCastling;
 		public event Action<int, int> SmallCastling;
 		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)

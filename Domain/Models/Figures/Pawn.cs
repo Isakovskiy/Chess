@@ -11,6 +11,7 @@ namespace Domain.Models.Figures
         public Pawn(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
         {
         }
+        public override string Name => "Pawn";
         public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
             var list = new List<Cell>();

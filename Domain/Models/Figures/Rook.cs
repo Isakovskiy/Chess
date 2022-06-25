@@ -8,6 +8,9 @@ namespace Domain.Models.Figures
 		{
 
 		}
+
+		public override string Name => "Rook";
+
 		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
 		{
 			List<Cell> list = new List<Cell>();
