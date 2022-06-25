@@ -11,6 +11,7 @@ namespace Domain.Models.Figures
         public Pawn(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
         {
         }
+        public override string Name => "Pawn";
         public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
             var list = new List<Cell>();
@@ -19,7 +20,7 @@ namespace Domain.Models.Figures
             var x = CurrentCell.X;
             var y = CurrentCell.Y;
 
-            if (CanMoveTo(x, y + dir, boardSells))
+            if (CanMoveTo(x, y + dir, boardSells) && boardSells[x, y + dir].Figure == null)
             {
                 list.Add(boardSells[x, y + dir]);
 

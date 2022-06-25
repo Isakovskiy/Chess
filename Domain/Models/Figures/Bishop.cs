@@ -12,6 +12,7 @@ namespace Domain.Models.Figures
         {
         }
 
+        public override string Name => "Bishop";
         public override List<Cell> GetAvaibleCells(Cell[,] boardCells)
         {
             var list = new List<Cell>();

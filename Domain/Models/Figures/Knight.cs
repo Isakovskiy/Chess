@@ -11,7 +11,7 @@ namespace Domain.Models.Figures
         public Knight(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black) : base(sell, figuresPainter, color)
         {
         }
-
+        public override string Name => "Knight";
         public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
         {
             var list = new List<Cell>();

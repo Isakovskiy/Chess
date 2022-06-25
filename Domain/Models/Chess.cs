@@ -11,13 +11,42 @@ namespace Domain.Models
             FiguresPainter = figuresPainter;
             var cells = Board.GetEmptyBoard();
 
-            //Создаем фигуры
-            var l1 = new Rook(cells[0, 0], figuresPainter, FigureColor.White);
-            var l2 = new Rook(cells[7, 0], figuresPainter, FigureColor.White);
-            var k = new King(cells[4, 0], FiguresPainter, FigureColor.White);
+            FigureColor color = FigureColor.White;
+            for (int k = 1; k <= 6; k += 5)
+            {
+                for (int i = 0; i < Board.SIZE; i++)
+                {
+                    new Pawn(cells[i, k], figuresPainter, color);
+                }
+                color = color.Reverese();
+            }
 
-            k.SmallCastling += (x, y) => l2.Move(cells[x, y]);
-            k.BigCastling += (x, y) => l1.Move(cells[x, y]);
+            var lw = new Rook(cells[0, 0], FiguresPainter, FigureColor.White);
+            var rw = new Rook(cells[7, 0], FiguresPainter, FigureColor.White);
+            var lb = new Rook(cells[0, 7], FiguresPainter, FigureColor.Black);
+            var rb = new Rook(cells[7, 7], FiguresPainter, FigureColor.Black);
+
+            new Knight(cells[1, 0], FiguresPainter, FigureColor.White);
+            new Knight(cells[6, 0], FiguresPainter, FigureColor.White);
+            new Knight(cells[1, 7], FiguresPainter, FigureColor.Black);
+            new Knight(cells[6, 7], FiguresPainter, FigureColor.Black);
+
+            new Bishop(cells[2, 0], FiguresPainter, FigureColor.White);
+            new Bishop(cells[5, 0], FiguresPainter, FigureColor.White);
+            new Bishop(cells[2, 7], FiguresPainter, FigureColor.Black);
+            new Bishop(cells[5, 7], FiguresPainter, FigureColor.Black);
+
+            new Queen(cells[3, 0], FiguresPainter, FigureColor.White);
+            var kw = new King(cells[4, 0], FiguresPainter, FigureColor.White);
+            new Queen(cells[4, 7], FiguresPainter, FigureColor.Black);
+            var kb = new King(cells[3, 7], FiguresPainter, FigureColor.Black);
+
+
+            kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
+            kw.BigCastling += (x, y) => lw.Move(cells[x, y]);
+            kb.SmallCastling += (x, y) => lb.Move(cells[x, y]);
+            kb.BigCastling += (x, y) => rb.Move(cells[x, y]);
+
 
             _board = new Board(cells);
             BoardPainter.DrawBoard(_board.Cells);
@@ -25,6 +54,8 @@ namespace Domain.Models
 
         private Board _board;
         private Figure? _choosedFigure = null;
+
+        public IEnumerable<Cell> AvaibledCells => _choosedFigure?.GetAvaibleCells(_board.Cells)?.RemoveBannedMoves(_choosedFigure, _board);
 
         public FigureColor GoingPlayer { get; set; } = FigureColor.White;
         public IBoardPainter BoardPainter { get; set; }
@@ -44,7 +75,12 @@ namespace Domain.Models
             }
 
             BoardPainter.ResetAvaibleCells();
-            _choosedFigure = null;
+
+            if(_choosedFigure != null)
+            {
+                FiguresPainter.CancelFigure(_choosedFigure);
+                _choosedFigure = null;
+            }
 
             if (figure != null && figure.Color == GoingPlayer)
             {
@@ -57,16 +93,29 @@ namespace Domain.Models
             }
         }
 
-        public GameResult Move(Cell toCell)
+        public GameResult Move(int x, int y)
         {
+            Cell toCell;
+            try
+            {
+                toCell = _board.Cells[x, y];
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
             if (toCell == null)
             {
                 throw new ArgumentNullException();
             }
             List<Cell>? avaibleSells = _choosedFigure?.GetAvaibleCells(_board.Cells);
+
             if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toCell))
             {
                 _choosedFigure.Move(toCell);
+                var figure = _choosedFigure;
+                _choosedFigure = null;
                 GoingPlayer = GoingPlayer.Reverese();
 
                 BoardPainter.ResetAvaibleCells();
@@ -76,9 +125,9 @@ namespace Domain.Models
                 {
                     return GameResult.Draw;
                 }
-                else if (Check(_choosedFigure.Color.Reverese()))
+                else if (Check(figure.Color.Reverese()))
                 {
-                    return CheckMate(_choosedFigure.Color.Reverese());
+                    return CheckMate(figure.Color.Reverese());
                 }
 
             }
@@ -93,7 +142,7 @@ namespace Domain.Models
 
             foreach (var f in ourFigures)
             {
-                allSells.AddRange(f.GetAvaibleCells(_board.Cells));
+                allSells.AddRange(f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board));
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
@@ -105,7 +154,7 @@ namespace Domain.Models
         {
             //black
             return !Check(GoingPlayer) && !Check(GoingPlayer.Reverese()) && 
-            _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
+             _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
         }
 
 
