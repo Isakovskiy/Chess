@@ -37,7 +37,7 @@ namespace WinFormsApp
 			this.FlatAppearance.BorderSize = 0;
 			this.Location = location;
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Size = new System.Drawing.Size(Form1.CELLSIZE, Form1.CELLSIZE);
+            this.Size = new System.Drawing.Size(ChessForm.CELLSIZE, ChessForm.CELLSIZE);
             this.UseVisualStyleBackColor = false;
             this.Click += button_Click;
 
