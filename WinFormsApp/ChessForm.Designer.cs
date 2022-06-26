@@ -8,12 +8,14 @@ namespace WinFormsApp
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private Button soloButton;
+        private Button multiButton;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+		/// <summary>
+		///  Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
             {
@@ -37,13 +39,34 @@ namespace WinFormsApp
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(600, 600);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
             this.Text = "Form1";
 			MaximizeBox = false;
-			this.Load += new System.EventHandler(this.Form1_Load);
-            this.ResumeLayout(false);
+            this.soloButton = new Button()
+            {
+                Location = new Point(100, 100),
+                Size = new Size(100, 30),
+                BackColor = Color.Orange,
+                ForeColor = Color.White,
+                Text = "Solo Play"
+            };
+			this.multiButton = new Button()
+			{
+				Location = new Point(300, 100),
+				Size = new Size(100, 30),
+				BackColor = Color.Blue,
+				ForeColor = Color.White,
+				Text = "Multi Play",
+			};
+            this.soloButton.Click += SoloButton_Click;
+            this.multiButton.Click += MultiButton_Click;
+
+			Controls.Add(soloButton);
+            Controls.Add(multiButton);
+
+			this.ResumeLayout(false);
 
         }
 

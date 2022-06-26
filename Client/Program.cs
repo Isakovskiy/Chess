@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using WinFormsApp;
 using System.Text.Json;
+using Server;
 
 namespace Client
 {
@@ -34,16 +35,16 @@ namespace Client
             while (stream.DataAvailable); // пока данные есть в потоке
 
             var x = response.ToString();
-            var w = JsonSerializer.Deserialize<cls>(response.ToString());
+			Packet[]? packets = JsonSerializer.Deserialize<Packet[]>(response.ToString());
 
-            MessageBox.Show(((cls)(JsonSerializer.Deserialize(response.ToString(), typeof(cls)))).x.ToString());
+            MessageBox.Show("errror");
 
             stream.Close();
             client.Close();
 
             ApplicationConfiguration.Initialize();
 
-            Application.Run(new ChessForm());
+            //Application.Run(new ChessForm());
         }
     }
 
