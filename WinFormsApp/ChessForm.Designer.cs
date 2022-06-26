@@ -2,7 +2,7 @@
 
 namespace WinFormsApp
 {
-    partial class Form1
+    partial class ChessForm
     {
         /// <summary>
         ///  Required designer variable.

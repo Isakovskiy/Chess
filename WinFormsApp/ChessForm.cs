@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace WinFormsApp
 {
-    public partial class Form1 : Form
+    public partial class ChessForm : Form
     {
         public const int CELLSIZE = 75;
 
@@ -13,7 +13,7 @@ namespace WinFormsApp
 
         CellView[,] _cells = new CellView[Board.SIZE, Board.SIZE];
 
-        public Form1()
+        public ChessForm()
         {
             InitializeComponent();
         }
