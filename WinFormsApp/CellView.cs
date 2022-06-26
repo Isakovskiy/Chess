@@ -10,6 +10,7 @@ namespace WinFormsApp
     {
 
         private System.ComponentModel.IContainer components = null;
+        public readonly Color defaultColor;
 
         protected override void Dispose(bool disposing)
         {
@@ -25,15 +26,16 @@ namespace WinFormsApp
             X = x;
             Y = y;
             _action = action;
-
+            defaultColor = color;
             InitializeComponent(color, location);
         }
 
         private void InitializeComponent(Color color, Point location)
         {
             this.BackColor = color;
-            this.FlatAppearance.BorderSize = 0;
-            this.Location = location;
+			//this.FlatStyle = FlatStyle.Flat;
+			this.FlatAppearance.BorderSize = 0;
+			this.Location = location;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Size = new System.Drawing.Size(Form1.CELLSIZE, Form1.CELLSIZE);
             this.UseVisualStyleBackColor = false;

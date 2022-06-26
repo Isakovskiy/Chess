@@ -24,7 +24,7 @@ namespace WinFormsApp
             {
                 for(int j = 0; j < Board.SIZE; j++)
                 {
-                    _cells[i, j] = new CellView(((i + j) % 2 == 0) ? Color.Brown : Color.White, new Point(i * CELLSIZE, (7 - j) * CELLSIZE), button_Click, i, j);
+                    _cells[i, j] = new CellView(((i + j) % 2 == 0) ? Color.DimGray : Color.White, new Point(i * CELLSIZE, (7 - j) * CELLSIZE), button_Click, i, j);
                     Controls.Add(_cells[i, j]);
                 }
             }

@@ -12,6 +12,7 @@ namespace WinFormsApp
 
     class s : IFiguresPainter
     {
+        //private  Color defaultColor = Color.White;
         public s(CellView[,] cellsView)
         {
             _cellsView = cellsView;
@@ -25,7 +26,7 @@ namespace WinFormsApp
             {
                 if(c.X == figureCell.X && c.Y == figureCell.Y)
                 {
-                    c.BackColor = Color.FromArgb(100, c.BackColor);
+                    c.BackColor = Color.FromArgb(10, Color.Yellow);
                 }
             }
         }
@@ -46,7 +47,7 @@ namespace WinFormsApp
             {
                 if (c.X == figure.CurrentCell.X && c.Y == figure.CurrentCell.Y)
                 {
-                    c.BackColor = Color.FromArgb(255, c.BackColor);
+                    c.BackColor = Color.FromArgb(255, c.defaultColor);
                 }
             }
         }
@@ -66,7 +67,7 @@ namespace WinFormsApp
             {
                 if (avaibleCells.FirstOrDefault(c => c.X == cell.X && c.Y == cell.Y) != null)
                 {
-                    cell.BackColor = Color.FromArgb(50, cell.BackColor);
+                    cell.BackColor = Color.FromArgb(50, Color.Blue);
                 }
             }
         }
@@ -93,7 +94,7 @@ namespace WinFormsApp
         {
             foreach (var cell in _cellsView)
             {
-                cell.BackColor = Color.FromArgb(255, cell.BackColor);
+                cell.BackColor = Color.FromArgb(255, cell.defaultColor);
             }
         }
     }
