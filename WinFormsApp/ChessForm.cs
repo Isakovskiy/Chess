@@ -129,7 +129,7 @@ namespace WinFormsApp
 			CreateCellButtons(button_Click_Multi);
 
 			client = new TcpClient();
-			client.Connect("127.0.0.1", 8888);
+			client.Connect("26.0.154.116", 8888);
 			stream = client.GetStream();
 			Thread myThread1 = new Thread(Getting);
 			myThread1.Start();

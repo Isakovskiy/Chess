@@ -88,7 +88,7 @@ namespace Server
 			_figurePointer = new FigurePainter(_packets);
 			_chess = new Chess(_borderPointer, _figurePointer);
 
-			IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+			IPAddress localAddr = IPAddress.Parse("26.0.154.116");
 			server = new TcpListener(localAddr, 8888);
 			server.Start();
 
