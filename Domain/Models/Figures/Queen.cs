@@ -14,7 +14,7 @@ namespace Domain.Models.Figures
 
 		public override string Name => "Queen";
 
-		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
+		public override List<Cell> GetAvaibleCells(Cell[,] boardSells, MoveRecord lastMove)
         {
             var list = new List<Cell>();
 
