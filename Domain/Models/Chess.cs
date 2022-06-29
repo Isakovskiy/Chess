@@ -9,9 +9,12 @@ namespace Domain.Models
         {
             BoardPainter = boardPainter;
             FiguresPainter = figuresPainter;
+
             var cells = Board.GetEmptyBoard();
 
+            #region Создание фигур
             FigureColor color = FigureColor.White;
+            
             for (int k = 1; k <= 6; k += 5)
             {
                 for (int i = 0; i < Board.SIZE; i++)
@@ -47,8 +50,10 @@ namespace Domain.Models
             kb.SmallCastling += (x, y) => lb.Move(cells[x, y]);
             kb.BigCastling += (x, y) => rb.Move(cells[x, y]);
 
+            #endregion
 
             _board = new Board(cells);
+
             BoardPainter.DrawBoard(_board.Cells);
         }
 
@@ -57,7 +62,7 @@ namespace Domain.Models
 
         public IEnumerable<Cell> AvaibledCells => _choosedFigure?.GetAvaibleCells(_board.Cells)?.RemoveBannedMoves(_choosedFigure, _board);
 
-        public FigureColor GoingPlayer { get; set; } = FigureColor.White;
+        public FigureColor GoingPlayer { get; private set; } = FigureColor.White;
         public IBoardPainter BoardPainter { get; set; }
         public IFiguresPainter FiguresPainter { get; set; }
 
@@ -142,13 +147,10 @@ namespace Domain.Models
 
             foreach (var f in ourFigures)
             {
-                allSells.AddRange(f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board));
+                allSells.AddRange(f.GetAvaibleCells(_board.Cells));
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
-        private bool Check(Figure figure) => // шах
-             figure.GetAvaibleCells(_board.Cells).FirstOrDefault(s => s.Figure is King) != null;
-
 
         private bool Draw()
         {

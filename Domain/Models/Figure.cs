@@ -8,7 +8,6 @@ namespace Domain.Models
         public bool Moved { get; private set; } = false;
         public Cell CurrentCell { get; protected set; }
         public IFiguresPainter FiguresPainter { get; set; }
-
         abstract public string Name { get; }
         public Figure(Cell sell, IFiguresPainter figuresPainter, FigureColor color = FigureColor.Black)
         {
