@@ -44,8 +44,8 @@ namespace Domain.Models
 
             kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
             kw.BigCastling += (x, y) => lw.Move(cells[x, y]);
-            kb.SmallCastling += (x, y) => lb.Move(cells[x, y]);
-            kb.BigCastling += (x, y) => rb.Move(cells[x, y]);
+            kb.BigCastling += (x, y) => lb.Move(cells[x, y]);
+            kb.SmallCastling += (x, y) => rb.Move(cells[x, y]);
 
 
             _board = new Board(cells);

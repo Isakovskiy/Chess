@@ -34,9 +34,10 @@ namespace WinFormsApp
         {
             this.BackColor = color;
 			//this.FlatStyle = FlatStyle.Flat;
-			this.FlatAppearance.BorderSize = 0;
+			this.FlatAppearance.BorderSize = 1;
+            this.FlatAppearance.BorderColor = Color.LightGray;
 			this.Location = location;
-            this.Margin = new System.Windows.Forms.Padding(0);
+			this.Margin = new System.Windows.Forms.Padding(0);
             this.Size = new System.Drawing.Size(ChessForm.CELLSIZE, ChessForm.CELLSIZE);
             this.UseVisualStyleBackColor = false;
             this.Click += button_Click;
