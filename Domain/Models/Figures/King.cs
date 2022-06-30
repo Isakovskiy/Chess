@@ -80,14 +80,14 @@ namespace Domain.Models.Figures
 					if (Color == FigureColor.White)
 						BigCastling(3, 0);
 					else
-						SmallCastling(2, 7);
+						BigCastling(3, 7);
 				}
 				else if (direction == 2)
 				{
 					if (Color == FigureColor.White)
 						SmallCastling(5, 0);
 					else
-						BigCastling(4, 7);
+						SmallCastling(5, 7);
 				}
 				else
 					throw new Exception("Error with castling, obratites' k programmistu"); // Богдан, шо за бред? ты не доверяешь math.abs?

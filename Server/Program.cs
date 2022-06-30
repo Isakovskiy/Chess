@@ -50,17 +50,17 @@ namespace Server
 
 						if (_chess.AvaibledCells?.FirstOrDefault(c => c.X == x && c.Y == y) != null)
 						{
-							var res = _chess.Move(x, y);
-							if (res != GameResult.Going)
+							GameResult result = _chess.Move(x, y);
+							if (result != GameResult.Going)
 							{
-//								MessageBox.Show(res.ToString());
+								//game the end
 							}
-							Send(new[] { stream1, stream2 });
+							Send(new[] { stream1, stream2 }, result);
 						}
 						else
 						{
 							_chess.ChooseFigure(x, y);
-							Send(new[] { stream });
+							Send(new[] { stream }, GameResult.Going);
 						}
 					}
 				}
@@ -89,6 +89,7 @@ namespace Server
 			_chess = new Chess(_borderPointer, _figurePointer);
 
 			IPAddress localAddr = IPAddress.Parse("26.0.154.116");
+      
 			server = new TcpListener(localAddr, 8888);
 			server.Start();
 
@@ -108,100 +109,46 @@ namespace Server
 			Thread t2 = new Thread(() => Getting(stream2, FigureColor.Black));
 			t2.Start();
 
-			Send(new NetworkStream[] {stream1, stream2});
-
-			//check chei hod
-			//get x, y
-			//choose figure (x, y)
-			//send to (1)
-			//get x, y
-			//move(x, y)
-			//send to (all)
+			StartSend();
 		}
-		public static void Send(NetworkStream[] stream)
+		private static void StartSend()
 		{
 			try
 			{
-				var x = JsonSerializer.Serialize<Packet[]>(_packets);
-				byte[] data = Encoding.UTF8.GetBytes(x);
+				Package[] packeges = new[]
+				{
+					new Package("White", GameResult.Going.ToString(), _packets),
+					new Package("Black", GameResult.Going.ToString(), _packets)
+				};
+				NetworkStream[] streams = new[] { stream1, stream2 };
 
-				foreach(var s in stream)
-					s.Write(data, 0, data.Length);
+				for (int i = 0; i < 2; i++)
+				{
+					string jsonStr = JsonSerializer.Serialize<Package>(packeges[i]);
+					byte[] data = Encoding.UTF8.GetBytes(jsonStr);
+					streams[i].Write(data, 0, data.Length);
+				}
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 			}
 		}
-	}
-	class BoardPainter : IBoardPainter
-	{
-		private Packet[] packets;
-		public BoardPainter(Packet[] pack)
+		public static void Send(NetworkStream[] streams, GameResult result)
 		{
-			packets = pack;
-		}
-		public void DrawAvaibleCells(List<Cell> avaibleCells)
-		{
-			foreach (Cell cell in avaibleCells)
+			try
 			{
-				packets.First(p => p.X == cell.X && p.Y == cell.Y).CellColor = "Blue";
-			}
-		}
+				Package packege = new Package(_chess.GoingPlayer.ToString(), result.ToString(), _packets);
+				string jsonStr = JsonSerializer.Serialize<Package>(packege);
+				byte[] data = Encoding.UTF8.GetBytes(jsonStr);
 
-		public void DrawBoard(Cell[,] sells)
-		{
-			int i = 0;
-			for(int x = 0; x < sells.GetLength(0); x++)
-			for (int y = 0; y < sells.GetLength(1); y++)
+				foreach(var s in streams)
+					s.Write(data, 0, data.Length);
+			}
+			catch (Exception ex)
 			{
-				if(x == 5 && y == 2)
-					{
-
-					}
-				packets[i] = new Packet(
-					x:x,
-					y:y,
-					figureName: sells[x, y].Figure?.Name,
-					figureColor: sells[x, y].Figure?.Color.ToString(),
-					cellColor: ((x + y) % 2 == 0) ? "DimGray" : "White");
-				i++;
+				Console.WriteLine(ex.Message);
 			}
-		}
-
-		public void ResetAvaibleCells()
-		{
-			foreach (Packet p in packets.Where(p => p.CellColor == "Blue"))
-				p.CellColor = (p.X + p.Y) % 2 == 0 ? "DimGray" : "White";
-		}
-	}
-
-	class FigurePainter : IFiguresPainter
-	{
-		private Packet[] packets;
-		public FigurePainter(Packet[] pack)
-		{
-			packets = pack;
-		}
-		public void CancelFigure(Figure figure)
-		{
-			Packet p = packets.First(p => p.Y == figure.CurrentCell.Y && p.X == figure.CurrentCell.X);
-			p.CellColor = (p.X + p.Y) % 2 == 0 ? "DimGray" : "White";
-		}
-
-		public void ChooseFigure(Cell figureCell)
-		{
-			packets.First(p => p.X == figureCell.X && p.Y == figureCell.Y).CellColor = "Yellow";
-		}
-
-		public TransformFigures DrawFigureReplaceSelectionAndGet()
-		{
-			return TransformFigures.Queen;
-		}
-
-		public void MoveFigure(Cell from, Cell to)
-		{
-			
 		}
 	}
 }
