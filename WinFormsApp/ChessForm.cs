@@ -154,6 +154,7 @@ namespace WinFormsApp
 
 			client = new TcpClient();
 			client.Connect("26.167.190.81", 8888);
+      
 			stream = client.GetStream();
 			Thread myThread1 = new Thread(Getting);
 			myThread1.Start();
