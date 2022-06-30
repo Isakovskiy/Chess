@@ -46,10 +46,10 @@ namespace Domain.Models
             new Queen(cells[3, 7], FiguresPainter, FigureColor.Black);
             var kb = new King(cells[4, 7], FiguresPainter, FigureColor.Black);
 
-            kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
-            kw.BigCastling += (x, y) => lw.Move(cells[x, y]);
-            kb.BigCastling += (x, y) => lb.Move(cells[x, y]);
-            kb.SmallCastling += (x, y) => rb.Move(cells[x, y]);
+            kw.SmallCastling += (x, y) => rw.Move(cells[x, y], LastMove);
+            kw.BigCastling += (x, y) => lw.Move(cells[x, y], LastMove);
+            kb.BigCastling += (x, y) => lb.Move(cells[x, y], LastMove);
+            kb.SmallCastling += (x, y) => rb.Move(cells[x, y], LastMove);
 
             #endregion
 
