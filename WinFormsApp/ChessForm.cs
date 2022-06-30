@@ -21,6 +21,8 @@ namespace WinFormsApp
 		private Chess _chess;
 		private Packet[]? _packets;
 
+		private FigureColor? myColor = null;
+
 		CellView[,] _cells = new CellView[Board.SIZE, Board.SIZE];
 
 		public ChessForm()
@@ -57,6 +59,11 @@ namespace WinFormsApp
 		}
 		private void button_Click_Multi(int x, int y)
 		{
+			if(myColor == FigureColor.Black)
+			{
+				x = 7 - x;
+				y = 7 - y;
+			}
 			byte[] data = Encoding.UTF8.GetBytes($"{x} {y}");
 
 			stream.Write(data, 0, data.Length);
@@ -76,29 +83,42 @@ namespace WinFormsApp
 						response.Append(Encoding.UTF8.GetString(data, 0, bytes));
 					}
 					while (stream.DataAvailable);
-					_packets = JsonSerializer.Deserialize<Packet[]>(response.ToString());
+					Package package = JsonSerializer.Deserialize<Package>(response.ToString());
+					if(myColor == null)
+					{
+						myColor = (package?.WhoGoing == "White") ? FigureColor.White : FigureColor.Black;
+						package.WhoGoing = "White";
+					} 
+					_packets = package?.Packets;
 
 					if (_packets != null)
 					{
 						foreach (Packet p in _packets)
 						{
+							int x = p.X;
+							int y = p.Y;
+							if(myColor == FigureColor.Black)
+							{
+								x = 7 - x;
+								y = 7 - y;
+							}
 							if (p.FigureName != null)
-								_cells[p.X, p.Y].Image = new Bitmap(Image.FromFile($@"..\..\..\Figures\{p.FigureName}{p.FigureColor.ToString()[0]}.png"), new Size(75, 75));
+								_cells[x, y].Image = new Bitmap(Image.FromFile($@"..\..\..\Figures\{p.FigureName}{p.FigureColor.ToString()[0]}.png"), new Size(75, 75));
 							else
-								_cells[p.X, p.Y].Image = null;
+								_cells[x, y].Image = null;
 							switch (p.CellColor)
 							{
 								case "White":
-									_cells[p.X, p.Y].BackColor = Color.White;
+									_cells[x, y].BackColor = Color.White;
 									break;
 								case "Yellow":
-									_cells[p.X, p.Y].BackColor = Color.Yellow;
+									_cells[x, y].BackColor = Color.FromArgb(50, Color.Yellow);
 									break;
 								case "Blue":
-									_cells[p.X, p.Y].BackColor = Color.Blue;
+									_cells[x, y].BackColor = Color.FromArgb(50, Color.Blue);
 									break;
 								case "DimGray":
-									_cells[p.X, p.Y].BackColor = Color.DimGray;
+									_cells[x, y].BackColor = Color.DimGray;
 									break;
 								default:
 									break;
@@ -107,10 +127,14 @@ namespace WinFormsApp
 					}
 				}
 			}
-			catch(Exception ex)
+			catch
 			{
+				Application.Exit();
+			}
+			finally
+			{
+				client.Close();
 				stream.Close();
-				MessageBox.Show(ex.Message);
 			}
 		}
 
@@ -129,7 +153,8 @@ namespace WinFormsApp
 			CreateCellButtons(button_Click_Multi);
 
 			client = new TcpClient();
-			client.Connect("26.0.154.116", 8888);
+			client.Connect("26.167.190.81", 8888);
+      
 			stream = client.GetStream();
 			Thread myThread1 = new Thread(Getting);
 			myThread1.Start();
