@@ -15,7 +15,7 @@ namespace Domain.Models.Figures
 
 		public event Action<int, int> BigCastling;
 		public event Action<int, int> SmallCastling;
-		public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
+		public override List<Cell> GetAvaibleCells(Cell[,] boardSells, MoveRecord lastMove)
 		{
 			var list = new List<Cell>();
 			Tuple<int, int>[] tuple = new Tuple<int, int>[8]
@@ -68,10 +68,10 @@ namespace Domain.Models.Figures
 			return list;
 		}
 
-		public override void Move(Cell newSell)
+		public override MoveRecord Move(Cell newSell, MoveRecord lastMove)
 		{
 			Cell oldCell = CurrentCell;
-			base.Move(newSell);
+			var record = base.Move(newSell, lastMove);
 			int direction = CurrentCell.X - oldCell.X; // -2 -> влево  2 -> вправо
 			if (Math.Abs(direction) == 2)
 			{
@@ -90,8 +90,9 @@ namespace Domain.Models.Figures
 						SmallCastling(5, 7);
 				}
 				else
-					throw new Exception("Error with castling, obratites' k programmistu");
+					throw new Exception("Error with castling, obratites' k programmistu"); // Богдан, шо за бред? ты не доверяешь math.abs?
 			}
+			return record;
 		}
 	}
 }

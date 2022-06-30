@@ -9,9 +9,14 @@ namespace Domain.Models
         {
             BoardPainter = boardPainter;
             FiguresPainter = figuresPainter;
+
             var cells = Board.GetEmptyBoard();
 
+            _movesLog = new List<MoveRecord>();
+
+            #region Создание фигур
             FigureColor color = FigureColor.White;
+            
             for (int k = 1; k <= 6; k += 5)
             {
                 for (int i = 0; i < Board.SIZE; i++)
@@ -41,25 +46,29 @@ namespace Domain.Models
             new Queen(cells[3, 7], FiguresPainter, FigureColor.Black);
             var kb = new King(cells[4, 7], FiguresPainter, FigureColor.Black);
 
-
             kw.SmallCastling += (x, y) => rw.Move(cells[x, y]);
             kw.BigCastling += (x, y) => lw.Move(cells[x, y]);
             kb.BigCastling += (x, y) => lb.Move(cells[x, y]);
             kb.SmallCastling += (x, y) => rb.Move(cells[x, y]);
 
+            #endregion
 
             _board = new Board(cells);
+
             BoardPainter.DrawBoard(_board.Cells);
         }
 
         private Board _board;
-        private Figure? _choosedFigure = null;
+        private Figure? _choosedFigure;
+        private List<MoveRecord> _movesLog;
 
-        public IEnumerable<Cell> AvaibledCells => _choosedFigure?.GetAvaibleCells(_board.Cells)?.RemoveBannedMoves(_choosedFigure, _board);
-
-        public FigureColor GoingPlayer { get; set; } = FigureColor.White;
+        public IEnumerable<Cell>? AvaibledCells => _choosedFigure?.GetAvaibleCells(_board.Cells, LastMove)?.RemoveIllegalMoves(_choosedFigure, _board, LastMove);
+        public IEnumerable<MoveRecord> MovesLog => _movesLog;
+        public MoveRecord LastMove => _movesLog.LastOrDefault();
+        public FigureColor GoingPlayer { get; private set; } = FigureColor.White;
         public IBoardPainter BoardPainter { get; set; }
         public IFiguresPainter FiguresPainter { get; set; }
+        
 
         public void ChooseFigure(int x, int y)
         {
@@ -86,7 +95,7 @@ namespace Domain.Models
             {
                 _choosedFigure = figure;
 
-                var avaibleSells = _choosedFigure.GetAvaibleCells(_board.Cells).RemoveBannedMoves(_choosedFigure, _board);
+                var avaibleSells = _choosedFigure.GetAvaibleCells(_board.Cells, LastMove).RemoveIllegalMoves(_choosedFigure, _board, LastMove);
 
                 FiguresPainter.ChooseFigure(_choosedFigure.CurrentCell);
                 BoardPainter.DrawAvaibleCells(avaibleSells);
@@ -109,11 +118,11 @@ namespace Domain.Models
             {
                 throw new ArgumentNullException();
             }
-            List<Cell>? avaibleSells = _choosedFigure?.GetAvaibleCells(_board.Cells);
+            List<Cell>? avaibleSells = _choosedFigure?.GetAvaibleCells(_board.Cells, LastMove);
 
-            if (_choosedFigure != null && avaibleSells.RemoveBannedMoves(_choosedFigure, _board).Contains(toCell))
+            if (_choosedFigure != null && avaibleSells.RemoveIllegalMoves(_choosedFigure, _board, LastMove).Contains(toCell))
             {
-                _choosedFigure.Move(toCell);
+                _movesLog.Add(_choosedFigure.Move(toCell, _movesLog.LastOrDefault()));
                 _choosedFigure = null;
                 
                 GoingPlayer = GoingPlayer.Reverese();
@@ -142,19 +151,16 @@ namespace Domain.Models
 
             foreach (var f in ourFigures)
             {
-                allSells.AddRange(f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board));
+                allSells.AddRange(f.GetAvaibleCells(_board.Cells, LastMove));
             }
             return allSells.FirstOrDefault(s => s.Figure is King && s.Figure?.Color == enemyColor) != null;
         }
-        private bool Check(Figure figure) => // шах
-             figure.GetAvaibleCells(_board.Cells).FirstOrDefault(s => s.Figure is King) != null;
-
 
         private bool Draw()
         {
             //black
             return !Check(GoingPlayer) && !Check(GoingPlayer.Reverese()) && 
-             _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells).RemoveBannedMoves(f, _board).Count != 0).Count() == 0;
+             _board.GetFigures(f => f.Color == GoingPlayer).Where(f => f.GetAvaibleCells(_board.Cells, LastMove).RemoveIllegalMoves(f, _board, LastMove).Count != 0).Count() == 0;
         }
 
 
@@ -168,7 +174,7 @@ namespace Domain.Models
 
             for (int i = 0; i < enemyFigures.Count; i++)
             {
-                foreach(var avaibleCell in enemyFigures[i].GetAvaibleCells(_board.Cells))
+                foreach(var avaibleCell in enemyFigures[i].GetAvaibleCells(_board.Cells, LastMove))
                 {
                     enemyFigures[i].ChangeCell(avaibleCell);
 
@@ -212,7 +218,7 @@ namespace Domain.Models
             }
         }
 
-        public static List<Cell> RemoveBannedMoves(this List<Cell> sells, Figure figure, Board board)
+        public static List<Cell> RemoveIllegalMoves(this List<Cell> sells, Figure figure, Board board, MoveRecord lastMove)
         {
             if(figure == null || board == null)
             {
@@ -231,7 +237,7 @@ namespace Domain.Models
 
                     for(int j = 0; j < enemyFigures.Count(); j++)
                     {
-                        var avaibleMoves = enemyFigures[j].GetAvaibleCells(board.Cells);
+                        var avaibleMoves = enemyFigures[j].GetAvaibleCells(board.Cells, lastMove);
                         if(avaibleMoves.FirstOrDefault(s => s.Figure is King && s.Figure.Color == figure.Color) != null)
                         {
                             sells.RemoveAt(i);

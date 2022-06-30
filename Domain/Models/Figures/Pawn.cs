@@ -12,7 +12,7 @@ namespace Domain.Models.Figures
         {
         }
         public override string Name => "Pawn";
-        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells, MoveRecord lastMove)
         {
             var list = new List<Cell>();
             var dir = Color == FigureColor.Black ? -1 : 1;
@@ -36,15 +36,24 @@ namespace Domain.Models.Figures
                     list.Add(boardSells[x + i, y + dir]);
                 }
             }
+            //Взятие на проходе
+            var passantCell = TryGetPassantCell(lastMove);
+            if (passantCell != null &&
+                Math.Abs(CurrentCell.X - passantCell.Item1) == 1 && CurrentCell.Y + dir == passantCell.Item2 &&
+                CanMoveTo(passantCell.Item1, passantCell.Item2, boardSells))
+            {
+                list.Add(boardSells[passantCell.Item1, passantCell.Item2]);
+            }
 
             return list;
         }
 
-        public override void Move(Cell newCell)
+        public override MoveRecord Move(Cell newCell, MoveRecord lastMove)
         {
-            base.Move(newCell);
+            var record = base.Move(newCell, lastMove);
 
-            if(newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
+            #region Transform
+            if (newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
             {
                 var newFigureType = FiguresPainter.DrawFigureReplaceSelectionAndGet();
                 switch (newFigureType)
@@ -66,6 +75,18 @@ namespace Domain.Models.Figures
                 }
 
             }
+            #endregion
+
+            // Взятие на проходе
+            if (lastMove != null)
+            {
+                var passantCell = TryGetPassantCell(lastMove);
+                if (passantCell?.Item1 == newCell.X && passantCell?.Item2 == newCell.Y)
+                {
+                    lastMove.Figure.FreeCell();
+                }
+            }
+            return record;
         }
 
     }

@@ -12,7 +12,7 @@ namespace Domain.Models.Figures
         {
         }
         public override string Name => "Knight";
-        public override List<Cell> GetAvaibleCells(Cell[,] boardSells)
+        public override List<Cell> GetAvaibleCells(Cell[,] boardSells, MoveRecord lastMove)
         {
             var list = new List<Cell>();
             Tuple<int, int>[] tuple = new Tuple<int, int>[8]
