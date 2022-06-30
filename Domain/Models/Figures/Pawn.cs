@@ -52,7 +52,8 @@ namespace Domain.Models.Figures
         {
             var record = base.Move(newCell, lastMove);
 
-            if(newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
+            #region Transform
+            if (newCell.Y == 0 || newCell.Y == Board.SIZE - 1)
             {
                 var newFigureType = FiguresPainter.DrawFigureReplaceSelectionAndGet();
                 switch (newFigureType)
@@ -73,6 +74,17 @@ namespace Domain.Models.Figures
                         break;
                 }
 
+            }
+            #endregion
+
+            // Взятие на проходе
+            if (lastMove != null)
+            {
+                var passantCell = TryGetPassantCell(lastMove);
+                if (passantCell?.Item1 == newCell.X && passantCell?.Item2 == newCell.Y)
+                {
+                    lastMove.Figure.FreeCell();
+                }
             }
             return record;
         }

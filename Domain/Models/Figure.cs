@@ -28,16 +28,6 @@ namespace Domain.Models
         {
             if (newCell == null) throw new ArgumentNullException("newsell is null");
 
-            // Взятие на проходе
-            if (lastMove != null)
-            {
-                var passantCell = TryGetPassantCell(lastMove);
-                if(passantCell?.Item1 == newCell.X && passantCell?.Item2 == newCell.Y)
-                {
-                    lastMove.Figure.FreeCell();
-                }
-            } 
-
             var moveRecord = new MoveRecord(this, CurrentCell, newCell);
             _movesLog.Add(moveRecord);
 
